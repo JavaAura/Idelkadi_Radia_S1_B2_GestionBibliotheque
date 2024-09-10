@@ -8,13 +8,15 @@ public abstract class Document {
     private String auteur;
     private LocalDate datePublication;
     private int nombreDePages;
-    private String statut = "disponible";
+    private StatutDocument statut;
 
-    public Document(String titre, String auteur, LocalDate datePublication, int nombreDePages) {
+
+    public Document(String titre, String auteur, LocalDate datePublication, int nombreDePages , StatutDocument statut) {
         this.titre = titre;
         this.auteur = auteur;
         this.datePublication = datePublication;
         this.nombreDePages = nombreDePages;
+        this.statut = statut != null ? statut : StatutDocument.DISPONIBLE;
     }
 
     public Long getId() {
@@ -57,11 +59,5 @@ public abstract class Document {
         this.nombreDePages = nombreDePages;
     }
 
-    public String getStatut() {
-        return statut;
-    }
 
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
 }
