@@ -6,19 +6,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.io.*;
 
 public class DBConnection {
 
     private static DBConnection instance;
-    private Connection connection;
+    private final Connection connection;
 
     private DBConnection() throws SQLException, IOException {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("main/resources/application.properties")){
-            Properties props = new Properties();
-            if (input == null) {
-                throw new IOException("Fichier de configuration non trouvé.");
-            }
-            props.load(input);
+        try{
+//                (InputStream input = getClass().getClassLoader().getResourceAsStream("main/resources/application.properties")){
+//            Properties props = new Properties();
+//            if (input == null) {
+//                throw new IOException("Fichier de configuration non trouvé.");
+//            }
+//            props.load(input);
+
+            FileReader reader=new FileReader("main/resources/application.properties");
+
+            Properties props=new Properties();
+            props.load(reader);
 
             String url = props.getProperty("db.url");
             String username = props.getProperty("db.username");
