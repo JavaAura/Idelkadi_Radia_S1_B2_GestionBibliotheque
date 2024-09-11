@@ -1,40 +1,114 @@
 package main.java.bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.UtilisateurDAO;
-import main.java.bibliotheque.modele.Utilisateur;
+import main.java.bibliotheque.DAO.ProfesseurDAO;
+import main.java.bibliotheque.modele.Professeur;
+import main.java.bibliotheque.DAO.DBConnection;
 
-import java.sql.SQLException;
-import java.util.Collections;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class ProfesseurDAOImpl implements UtilisateurDAO {
-    @Override
-    public void ajouterUtilisateur(Utilisateur utilisateur) throws SQLException {
+public class ProfesseurDAOImpl implements ProfesseurDAO {
 
+    private Connection connection;
+
+    public ProfesseurDAOImpl() {
+        try {
+            this.connection = DBConnection.getInstance().getConnection();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void mettreAJourUtilisateur(Utilisateur utilisateur) throws SQLException {
+    public void ajouterUtilisateur(Professeur professeur) throws SQLException {
+        String sql = "INSERT INTO professeur (nom, age, numero_dadhesion, departement) VALUES (?, ?, ?, ?)";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, professeur.getNom());
+            statement.setInt(2, professeur.getAge());
+            statement.setString(3, professeur.getNumeroDadhesion());
+            statement.setString(4, professeur.getDepartement());
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Le professeur a été ajouté avec succès !");
+            } else {
+                System.out.println("L'ajout du professeur a échoué.");
+            }        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout du professeur : " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
-    public void supprimerUtilisateur(int id) throws SQLException {
+    public void mettreAJourUtilisateur(Professeur professeur) throws SQLException {
+        String sql = "UPDATE professeur SET nom = ?, age = ?, departement = ? WHERE numero_dadhesion = ?";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, professeur.getNom());
+            statement.setInt(2, professeur.getAge());
+            statement.setString(3, professeur.getDepartement());
+            statement.setString(4, professeur.getNumeroDadhesion());
+            statement.executeUpdate();
+        }
     }
 
+
     @Override
-    public Utilisateur obtenirUtilisateurParId(int id) throws SQLException {
+    public void supprimerUtilisateur(String numeroDadhesion) throws SQLException {
+        String sql = "DELETE FROM professeur WHERE numero_dadhesion = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, numeroDadhesion);
+            statement.executeUpdate();
+        }
+    }
+    @Override
+    public Professeur obtenirUtilisateurParId(int id) throws SQLException {
         return null;
     }
 
-    @Override
-    public List<Utilisateur> obtenirTousLesUtilisateurs() throws SQLException {
-        return Collections.emptyList();
+    public Optional<Professeur> trouverParNumeroDadhesion(String numeroDadhesion) throws SQLException {
+        String sql = "SELECT * FROM professeur WHERE numero_dadhesion = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, numeroDadhesion);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Professeur professeur = new Professeur();
+
+                professeur.setNumeroDadhesion(rs.getString("numero_dadhesion"));
+                professeur.setNom(rs.getString("nom"));
+                professeur.setAge(rs.getInt("age"));
+                professeur.setDepartement(rs.getString("departement"));
+                return Optional.of(professeur);
+            }
+        }
+        return Optional.empty();
     }
 
-    @Override
-    public Utilisateur obtenirUtilisateurParNumeroDadhesion(String numeroDadhesion) throws SQLException {
-        return null;
+    public List<Professeur> obtenirTousLesUtilisateurs() throws SQLException {
+        List<Professeur> professeurs = new ArrayList<>();
+        String sql = "SELECT * FROM professeur";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                Professeur professeur = new Professeur(
+                        resultSet.getString("nom"),
+                        resultSet.getInt("age"),
+                        resultSet.getString("numero_dadhesion"),
+                        resultSet.getString("departement")
+                );
+                professeurs.add(professeur);
+            }
+        }
+        return professeurs;
     }
+
+
+
 }

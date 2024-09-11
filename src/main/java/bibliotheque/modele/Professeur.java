@@ -1,9 +1,11 @@
 package main.java.bibliotheque.modele;
 
-public class Professeur extends Utilisateur{
+public class Professeur extends Utilisateur {
 
     private String departement;
-    public Professeur(String nom, int age, String numeroDadhesion , String departement) {
+
+public Professeur(){}
+    public Professeur(String nom, int age, String numeroDadhesion, String departement) {
         super(nom, age, numeroDadhesion);
         this.departement = departement;
     }
@@ -14,5 +16,10 @@ public class Professeur extends Utilisateur{
 
     public void setDepartement(String departement) {
         this.departement = departement;
+    }
+
+    public String toString() {
+        return String.format("Numéro d'adhésion: %s, Nom: %s, Âge: %d, Département: %s, Rôle: Professeur",
+                getNumeroDadhesion(), getNom(), getAge(), departement);
     }
 }

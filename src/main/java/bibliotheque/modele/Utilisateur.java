@@ -7,6 +7,10 @@ public abstract class Utilisateur {
     private int age;
     private String numeroDadhesion;
 
+
+    public Utilisateur() {
+    }
+
     public Utilisateur(String nom, int age, String numeroDadhesion) {
         this.nom = nom;
         this.age = age;
