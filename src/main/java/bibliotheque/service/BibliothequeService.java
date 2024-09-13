@@ -481,7 +481,7 @@ public class BibliothequeService {
                             document.setStatut(StatutDocument.EMPRUNTE);
 
                             try {
-                                empruntDAOImpl.ajouterEmprunt( utilisateur.getId(), document.getId());
+                                empruntDAOImpl.ajouterEmprunt(utilisateur.getId(), document.getId());
                             } catch (SQLException e) {
                                 System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
                             }
@@ -496,6 +496,7 @@ public class BibliothequeService {
                                 } else if (document instanceof TheseUniversitaire) {
                                     theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
                                 }
+                                ((Empruntable) document).emprunter();
                             } catch (SQLException e) {
                                 System.out.println("Erreur lors de la mise à jour du document : " + e.getMessage());
                             }
@@ -514,6 +515,51 @@ public class BibliothequeService {
             }
         } else {
             System.out.println("Document non trouvé.");
+        }
+    }
+
+
+    public void retournerDocument() {
+
+        System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+        String numeroAdhesion = scanner.nextLine();
+
+        Optional<Document> documentOptional = recupererDocumentParId();
+        Document document = documentOptional.get();
+
+        UtilisateurService utilisateurService = new UtilisateurService();
+        Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
+        if (!utilisateurOptional.isPresent()) {
+            System.out.println("Utilisateur non trouvé.");
+            return;
+        }
+
+        Utilisateur utilisateur = utilisateurOptional.get();
+
+        try {
+            boolean empruntExistant = empruntDAOImpl.verifierEmprunt(document.getId(), utilisateur.getId());
+
+            if (empruntExistant) {
+                empruntDAOImpl.retournerEmprunt(document.getId(), utilisateur.getId());
+
+                document.setStatut(StatutDocument.DISPONIBLE);
+                if (document instanceof Livre) {
+                    livreDAOImpl.mettreAJourDocument((Livre) document);
+                } else if (document instanceof Magazine) {
+                    magazineDAOImpl.mettreAJourDocument((Magazine) document);
+                } else if (document instanceof JournalScientifique) {
+                    journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
+                } else if (document instanceof TheseUniversitaire) {
+                    theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
+                }
+
+                System.out.println("Le document a été retourné avec succès.");
+            } else {
+                System.out.println("Aucun emprunt trouvé pour cet utilisateur et ce document.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la gestion du retour du document : " + e.getMessage());
         }
     }
 

@@ -167,11 +167,9 @@ public class ConsoleUI {
             System.out.println("\n---- Gérer les emprunts ----\n" +
                     "\n1- Emprunter un document" +
                     "\n2- Retourner un document" +
-                    "\n3- Afficher les details d'un emprunt" +
-                    "\n4- Afficher Tous les emprunts" +
-                    "\n5- Quitter le sous-menu");
+                    "\n3- Quitter le sous-menu");
 
-            System.out.print("Veuillez entrer votre choix (1-6) : ");
+            System.out.print("Veuillez entrer votre choix (1-3) : ");
             choix = scanner.nextInt();
             scanner.nextLine();
 
@@ -182,18 +180,10 @@ public class ConsoleUI {
                     break;
 
                 case 2:
-                    //  retournerDocument();
+                     bibliotheque_Service.retournerDocument();
                     break;
 
                 case 3:
-                    //  afficherDetailsEmprunt();
-                    break;
-
-                case 4:
-                    //  afficherTousLesEmprunts();
-                    break;
-
-                case 5:
                     System.out.println("Quitter le sous-menu...");
                     return;
 

@@ -6,6 +6,7 @@ import main.java.bibliotheque.DAO.EmpruntDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EmpruntDAOImpl implements EmpruntDAO {
@@ -32,4 +33,25 @@ public class EmpruntDAOImpl implements EmpruntDAO {
         }
     }
 
+
+    public boolean verifierEmprunt(int documentId, int utilisateurId) throws SQLException {
+        String sql = "SELECT 1 FROM emprunt WHERE document_id = ? AND utilisateur_id = ? AND date_retour IS NULL";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, documentId);
+            pstmt.setInt(2, utilisateurId);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+    // Méthode pour mettre à jour la date de retour de l'emprunt
+    public void retournerEmprunt(int documentId, int utilisateurId) throws SQLException {
+        String sql = "UPDATE emprunt SET date_retour = ? WHERE document_id = ? AND utilisateur_id = ? AND date_retour IS NULL";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+            pstmt.setInt(2, documentId);
+            pstmt.setInt(3, utilisateurId);
+            pstmt.executeUpdate();
+        }
+    }
 }
