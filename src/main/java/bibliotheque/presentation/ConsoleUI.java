@@ -95,19 +95,18 @@ public class ConsoleUI {
             scanner.nextLine();
             switch (choix) {
                 case 1:
-//                    bibliotheque_Service.ajouterDocument();
+                   bibliotheque_Service.ajouterDocument();
                     break;
                 case 2:
-//                    bibliotheque_Service.modifierDocument();
+                    bibliotheque_Service.modifierDocument();
                     break;
                 case 3:
-//                    bibliotheque_Service.supprimerDocument();
+                    bibliotheque_Service.supprimerDocument();
                     break;
-                case 4:
-//                    bibliotheque_Service.trouverUnDocument();
+                case 4: bibliotheque_Service.trouverUnDocument();
                     break;
                 case 5:
-//                    bibliotheque_Service.afficherTousLesDocuments();
+                    bibliotheque_Service.afficherTousLesDocuments();
                     break;
                 case 6:
                     System.out.flush();

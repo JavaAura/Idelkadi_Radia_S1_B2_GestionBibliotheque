@@ -1,12 +1,20 @@
 package main.java.bibliotheque.modele;
 
+import main.java.bibliotheque.utilitaire.DateUtils;
+
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class Magazine extends Document{
     private String numero;
 
-    public Magazine(String titre, String auteur, LocalDate datePublication, int nombreDePages, StatutDocument statut, String numero) {
-        super(titre, auteur, datePublication, nombreDePages, statut);
+    public Magazine(String titre, String auteur, LocalDate datePublication, int nombreDePages , String numero) {
+        super(titre, auteur, datePublication, nombreDePages);
+        this.numero = numero;
+    }
+
+    public Magazine(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages , String numero) {
+        super(id, titre, auteur, datePublication, nombreDePages);
         this.numero = numero;
     }
 
@@ -17,4 +25,17 @@ public class Magazine extends Document{
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
+    @Override
+    public String toString() {
+        int id = getId();
+        String titre = Optional.ofNullable(getTitre()).orElse("N/A");
+        String auteur = Optional.ofNullable(getAuteur()).orElse("N/A");
+        String datePublication = Optional.ofNullable(getDatePublication()).map(DateUtils::formatDate).orElse("N/A");
+        String numero = Optional.ofNullable(getNumero()).orElse("N/A");
+        int nombreDePages = getNombreDePages();
+
+        return String.format("| %-10d | %-25s | %-15s | %-15s | %-10s | %-10d |",id, titre, auteur, datePublication, numero, nombreDePages);
+    }
+
 }

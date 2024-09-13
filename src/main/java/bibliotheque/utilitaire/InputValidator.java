@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class InputValidator {
 
     public static boolean isValidString(String str) {
-        return str != null && !str.trim().isEmpty();
+        return str != null && !str.trim().isEmpty() && str.matches("^[a-zA-Z0-9\\s]+$");
     }
 
     public static boolean isValidAge(int age) {

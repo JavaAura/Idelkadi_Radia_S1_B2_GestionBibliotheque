@@ -3,27 +3,33 @@ package main.java.bibliotheque.modele;
 import java.time.LocalDate;
 
 public abstract class Document {
-    private Long id;
+    private int id;
     private String titre;
     private String auteur;
     private LocalDate datePublication;
     private int nombreDePages;
-    private StatutDocument statut;
+    private StatutDocument statut= StatutDocument.DISPONIBLE;
 
-
-    public Document(String titre, String auteur, LocalDate datePublication, int nombreDePages , StatutDocument statut) {
+    public Document(String titre, String auteur, LocalDate datePublication, int nombreDePages) {
         this.titre = titre;
         this.auteur = auteur;
         this.datePublication = datePublication;
         this.nombreDePages = nombreDePages;
-        this.statut = statut != null ? statut : StatutDocument.DISPONIBLE;
+    }
+    public Document(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages) {
+        this.id = id;
+
+        this.titre = titre;
+        this.auteur = auteur;
+        this.datePublication = datePublication;
+        this.nombreDePages = nombreDePages;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -49,6 +55,14 @@ public abstract class Document {
 
     public void setDatePublication(LocalDate datePublication) {
         this.datePublication = datePublication;
+    }
+
+    public StatutDocument getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutDocument statut) {
+        this.statut = statut;
     }
 
     public int getNombreDePages() {

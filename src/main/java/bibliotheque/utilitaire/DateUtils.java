@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 
 public class DateUtils {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // Assurez-vous que ce format correspond à vos besoins
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Assurez-vous que ce format correspond à vos besoins
 
     public static LocalDate parseDate(String dateStr) {
         try {
