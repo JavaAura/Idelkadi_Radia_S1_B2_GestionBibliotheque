@@ -1,11 +1,12 @@
 package main.java.bibliotheque.modele;
 
+import main.java.bibliotheque.interfaces.Empruntable;
 import main.java.bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class TheseUniversitaire extends Document {
+public class TheseUniversitaire extends Document implements Empruntable {
     private String universite;
     private String domaine;
 
@@ -49,6 +50,26 @@ public class TheseUniversitaire extends Document {
 
         return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-20s | %-10d |",id,
                 titre, auteur, datePublication, universite, domaine, nombreDePages);
+    }
+
+
+    public void emprunter() {
+        if (getStatut() == StatutDocument.DISPONIBLE) {
+            setStatut(StatutDocument.EMPRUNTE);
+            System.out.println("Le livre a été emprunté.");
+        } else {
+            System.out.println("Le livre n'est pas disponible pour l'emprunt.");
+        }
+    }
+
+    @Override
+    public void retourner() {
+        if (getStatut() == StatutDocument.EMPRUNTE) {
+            setStatut(StatutDocument.DISPONIBLE);
+            System.out.println("Le livre a été retourné.");
+        } else {
+            System.out.println("Le livre n'a pas été emprunté.");
+        }
     }
 
 }

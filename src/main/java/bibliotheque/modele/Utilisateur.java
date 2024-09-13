@@ -2,7 +2,7 @@ package main.java.bibliotheque.modele;
 
 public abstract class Utilisateur {
 
-    private Long id;
+    private int id;
     private String nom;
     private int age;
     private String numeroDadhesion;
@@ -17,11 +17,11 @@ public abstract class Utilisateur {
         this.numeroDadhesion = numeroDadhesion;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

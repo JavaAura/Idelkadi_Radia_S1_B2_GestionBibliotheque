@@ -105,7 +105,7 @@ public class EtudiantDAOImpl implements EtudiantDAO {
 
             if (rs.next()) {
                 Etudiant etudiant = new Etudiant();
-
+                etudiant.setId(rs.getInt("id"));
                 etudiant.setNumeroDadhesion(rs.getString("numero_dadhesion"));
                 etudiant.setNom(rs.getString("nom"));
                 etudiant.setAge(rs.getInt("age"));

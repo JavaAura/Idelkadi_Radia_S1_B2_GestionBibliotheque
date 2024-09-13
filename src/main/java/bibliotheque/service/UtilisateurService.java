@@ -25,8 +25,8 @@ public class UtilisateurService {
     }
 
     private final static Scanner scanner = ScannerUtil.getScanner();
-    private static EtudiantDAO etudiantDAO;
-    private static ProfesseurDAO professeurDAO;
+    private static EtudiantDAO etudiantDAO = new EtudiantDAOImpl();
+    private static ProfesseurDAO professeurDAO = new ProfesseurDAOImpl();
 
     public  void ajouterUtilisateur() {
         int typeUtilisateur = 0;
@@ -118,133 +118,10 @@ public class UtilisateurService {
         }
     }
 
-    public  void mettreAJourUtilisateur() {
-        try {
-            etudiantDAO = new EtudiantDAOImpl();
-            professeurDAO = new ProfesseurDAOImpl();
-
-            System.out.print("Entrez le numéro d'adhésion de l'utilisateur à mettre à jour : ");
-            String numeroAdhesion = scanner.nextLine();
-
-            Optional<Etudiant> etudiant = etudiantDAO.trouverParNumeroDadhesion(numeroAdhesion);
-            Optional<Professeur> professeur = professeurDAO.trouverParNumeroDadhesion(numeroAdhesion);
-
-            if (etudiant.isPresent()) {
-                Etudiant etu = etudiant.get();
-                afficherDetailsUtilisateur(etu);
-
-                System.out.print("Entrez le nouveau nom (laissez vide pour conserver " + etu.getNom() + ") : ");
-                String nouveauNom = scanner.nextLine();
-                if (nouveauNom.isEmpty()) {
-                    nouveauNom = etu.getNom();
-                }
-
-                System.out.print("Entrez le nouvel âge (laissez vide pour conserver " + etu.getAge() + ") : ");
-                String ageInput = scanner.nextLine();
-                int nouvelAge = etu.getAge();
-                if (!ageInput.isEmpty()) {
-                    try {
-                        nouvelAge = Integer.parseInt(ageInput);
-                        if (!InputValidator.isValidAge(nouvelAge)) {
-                            System.out.println("Âge invalide. L'âge doit être supérieur à 6 ans.");
-                            return;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Âge invalide.");
-                        return;
-                    }
-                }
-
-                System.out.print("Entrez le nouveau niveau (laissez vide pour conserver " + etu.getNiveau() + ") : ");
-                String nouveauNiveau = scanner.nextLine();
-                if (nouveauNiveau.isEmpty()) {
-                    nouveauNiveau = etu.getNiveau();
-                }
-
-                Etudiant etudiantMisAJour = new Etudiant(nouveauNom, nouvelAge, numeroAdhesion, nouveauNiveau);
-                etudiantDAO.mettreAJourUtilisateur(etudiantMisAJour);
-
-                System.out.println("L'étudiant a été mis à jour avec succès.");
-
-            } else if (professeur.isPresent()) {
-                Professeur prof = professeur.get();
-                afficherDetailsUtilisateur(prof);
-
-                System.out.print("Entrez le nouveau nom (laissez vide pour conserver " + prof.getNom() + ") : ");
-                String nouveauNom = scanner.nextLine();
-                if (nouveauNom.isEmpty()) {
-                    nouveauNom = prof.getNom();
-                }
-
-                System.out.print("Entrez le nouvel âge (laissez vide pour conserver " + prof.getAge() + ") : ");
-                String ageInput = scanner.nextLine();
-                int nouvelAge = prof.getAge();
-                if (!ageInput.isEmpty()) {
-                    try {
-                        nouvelAge = Integer.parseInt(ageInput);
-                        if (!InputValidator.isValidAge(nouvelAge)) {
-                            System.out.println("Âge invalide. L'âge doit être supérieur à 6 ans.");
-                            return;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Âge invalide.");
-                        return;
-                    }
-                }
-
-                System.out.print("Entrez le nouveau département (laissez vide pour conserver " + prof.getDepartement() + ") : ");
-                String nouveauDepartement = scanner.nextLine();
-                if (nouveauDepartement.isEmpty()) {
-                    nouveauDepartement = prof.getDepartement();
-                }
-
-                Professeur professeurMisAJour = new Professeur(nouveauNom, nouvelAge, numeroAdhesion, nouveauDepartement);
-                professeurDAO.mettreAJourUtilisateur(professeurMisAJour);
-
-                System.out.println("Le professeur a été mis à jour avec succès.");
-
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la mise à jour de l'utilisateur : " + e.getMessage());
-        }
-    }
-
-    public  void supprimerUtilisateur() {
-        try {
-            etudiantDAO = new EtudiantDAOImpl();
-            professeurDAO = new ProfesseurDAOImpl();
-
-            System.out.print("Entrez le numéro d'adhésion de l'utilisateur à supprimer : ");
-            String numeroAdhesion = scanner.nextLine();
-
-            Optional<Etudiant> etudiant = etudiantDAO.trouverParNumeroDadhesion(numeroAdhesion);
-            Optional<Professeur> professeur = professeurDAO.trouverParNumeroDadhesion(numeroAdhesion);
-
-            if (etudiant.isPresent()) {
-                etudiantDAO.supprimerUtilisateur(numeroAdhesion);
-                System.out.println("L'étudiant avec le numéro d'adhésion " + numeroAdhesion + " a été supprimé.");
-            } else if (professeur.isPresent()) {
-                professeurDAO.supprimerUtilisateur(numeroAdhesion);
-                System.out.println("Le professeur avec le numéro d'adhésion " + numeroAdhesion + " a été supprimé.");
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la suppression de l'utilisateur : " + e.getMessage());
-        }
-    }
 
     public void afficherTousUtilisateurs() {
         try {
-            etudiantDAO = new EtudiantDAOImpl();
-            professeurDAO = new ProfesseurDAOImpl();
-
             List<Etudiant> etudiants = etudiantDAO.obtenirTousLesUtilisateurs();
-
             List<Professeur> professeurs = professeurDAO.obtenirTousLesUtilisateurs();
 
             if (etudiants.isEmpty() && professeurs.isEmpty()) {
@@ -255,16 +132,14 @@ public class UtilisateurService {
                 if (!etudiants.isEmpty()) {
                     System.out.println("| Numéro d'adhésion\t\t\t| Nom\t\t\t  | Âge  | Niveau       | Rôle       |");
                     System.out.println("------------------------------------------------------------------------------");
-                    etudiants.forEach(this::afficherDetailsUtilisateur);
+                    etudiants.forEach(etudiant -> System.out.println(etudiant.toString()));
                 }
 
                 if (!professeurs.isEmpty()) {
                     System.out.println("\n\t\t ********************************************** \n");
-
-
                     System.out.println("| Numéro d'adhésion \t\t\t| Nom \t\t\t\t | Âge  | Département  | Rôle       |");
                     System.out.println("------------------------------------------------------------------------------");
-                    professeurs.forEach(this::afficherDetailsUtilisateur);
+                    professeurs.forEach(professeur -> System.out.println(professeur.toString()));
                 }
             }
         } catch (SQLException e) {
@@ -272,55 +147,152 @@ public class UtilisateurService {
         }
     }
 
-    private void afficherDetailsUtilisateur(Utilisateur utilisateur) {
-        String numeroAdhesion = Optional.ofNullable(utilisateur.getNumeroDadhesion()).orElse("N/A");
-        String nom = Optional.ofNullable(utilisateur.getNom()).orElse("N/A");
-        String age = Optional.of(Integer.toString(utilisateur.getAge())).orElse("N/A");
-        String role = utilisateur instanceof Etudiant ? "Étudiant" : "Professeur";
+    public void afficherDetailsUtilisateur() {
+        System.out.print("Entrez le numéro d'adhésion de l'utilisateur : ");
+        String numeroAdhesion = scanner.nextLine();
 
-        if (utilisateur instanceof Etudiant) {
-            String niveau = Optional.ofNullable(((Etudiant) utilisateur).getNiveau()).orElse("N/A");
-            System.out.printf("| %-25s | %-15s | %-4s | %-12s | %-10s |%n",
-                    numeroAdhesion, nom, age, niveau, role);
-        } else if (utilisateur instanceof Professeur) {
-            String departement = Optional.ofNullable(((Professeur) utilisateur).getDepartement()).orElse("N/A");
-            System.out.printf("| %-29s | %-18s | %-4s | %-12s | %-10s |%n",
-                    numeroAdhesion, nom, age, departement, role);
+        Optional<Utilisateur> utilisateur = trouverUtilisateur(numeroAdhesion);
+
+        if (utilisateur.isPresent()) {
+            Utilisateur user = utilisateur.get();
+
+            String numAdhesion = Optional.ofNullable(user.getNumeroDadhesion()).orElse("N/A");
+            String nom = Optional.ofNullable(user.getNom()).orElse("N/A");
+            String age = Optional.of(Integer.toString(user.getAge())).orElse("N/A");
+            String role = user instanceof Etudiant ? "Étudiant" : "Professeur";
+
+            System.out.println("Détails de l'utilisateur :");
+            System.out.println("Numéro d'adhésion : " + numAdhesion);
+            System.out.println("Nom : " + nom);
+            System.out.println("Âge : " + age);
+            System.out.println("Rôle : " + role);
+
+            if (user instanceof Etudiant) {
+                String niveau = Optional.ofNullable(((Etudiant) user).getNiveau()).orElse("N/A");
+                System.out.println("Niveau : " + niveau);
+            }
+            else if (user instanceof Professeur) {
+                String departement = Optional.ofNullable(((Professeur) user).getDepartement()).orElse("N/A");
+                System.out.println("Département : " + departement);
+            }
+        } else {
+            System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
         }
     }
 
-    public void trouverUtilisateur() {
+
+    public void mettreAJourUtilisateur() {
+        try {
+            System.out.print("Entrez le numéro d'adhésion de l'utilisateur à mettre à jour : ");
+            String numeroAdhesion = scanner.nextLine();
+
+            Optional<Utilisateur> utilisateur = trouverUtilisateur(numeroAdhesion);
+
+            if (utilisateur.isPresent()) {
+                Utilisateur utilisateurAMettreAJour = utilisateur.get();
+                utilisateurAMettreAJour.toString();
+
+                System.out.print("Entrez le nouveau nom (laissez vide pour conserver " + utilisateurAMettreAJour.getNom() + ") : ");
+                String nouveauNom = scanner.nextLine();
+                if (!nouveauNom.isEmpty()) {
+                    utilisateurAMettreAJour.setNom(nouveauNom);
+                }
+
+                System.out.print("Entrez le nouvel âge (laissez vide pour conserver " + utilisateurAMettreAJour.getAge() + ") : ");
+                String ageInput = scanner.nextLine();
+                if (!ageInput.isEmpty()) {
+                    try {
+                        int nouvelAge = Integer.parseInt(ageInput);
+                        if (InputValidator.isValidAge(nouvelAge)) {
+                            utilisateurAMettreAJour.setAge(nouvelAge);
+                        } else {
+                            System.out.println("Âge invalide. L'âge doit être supérieur à 6 ans.");
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Âge invalide.");
+                        return;
+                    }
+                }
+
+                if (utilisateurAMettreAJour instanceof Etudiant) {
+                    Etudiant etudiant = (Etudiant) utilisateurAMettreAJour;
+                    System.out.print("Entrez le nouveau niveau (laissez vide pour conserver " + etudiant.getNiveau() + ") : ");
+                    String nouveauNiveau = scanner.nextLine();
+                    if (!nouveauNiveau.isEmpty()) {
+                        etudiant.setNiveau(nouveauNiveau);
+                    }
+                    etudiantDAO.mettreAJourUtilisateur(etudiant);
+                    System.out.println("L'étudiant a été mis à jour avec succès.");
+                } else if (utilisateurAMettreAJour instanceof Professeur) {
+                    Professeur professeur = (Professeur) utilisateurAMettreAJour;
+                    System.out.print("Entrez le nouveau département (laissez vide pour conserver " + professeur.getDepartement() + ") : ");
+                    String nouveauDepartement = scanner.nextLine();
+                    if (!nouveauDepartement.isEmpty()) {
+                        professeur.setDepartement(nouveauDepartement);
+                    }
+                    professeurDAO.mettreAJourUtilisateur(professeur);
+                    System.out.println("Le professeur a été mis à jour avec succès.");
+                }
+
+            } else {
+                System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la mise à jour de l'utilisateur : " + e.getMessage());
+        }
+    }
+
+    public void supprimerUtilisateur() {
+        try {
+            System.out.print("Entrez le numéro d'adhésion de l'utilisateur à supprimer : ");
+            String numeroAdhesion = scanner.nextLine();
+
+            Optional<Utilisateur> utilisateur = trouverUtilisateur(numeroAdhesion);
+
+            if (utilisateur.isPresent()) {
+                if (utilisateur.get() instanceof Etudiant) {
+                    etudiantDAO.supprimerUtilisateur(numeroAdhesion);
+                    System.out.println("L'étudiant avec le numéro d'adhésion " + numeroAdhesion + " a été supprimé.");
+                } else if (utilisateur.get() instanceof Professeur) {
+                    professeurDAO.supprimerUtilisateur(numeroAdhesion);
+                    System.out.println("Le professeur avec le numéro d'adhésion " + numeroAdhesion + " a été supprimé.");
+                }
+            } else {
+                System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la suppression de l'utilisateur : " + e.getMessage());
+        }
+    }
+
+    public Optional<Utilisateur> trouverUtilisateur(String numeroAdhesion) {
         try {
             etudiantDAO = new EtudiantDAOImpl();
             professeurDAO = new ProfesseurDAOImpl();
 
-            System.out.print("Veuillez entrer le numéro d'adhésion de l'utilisateur : ");
-            String numeroAdhesion = scanner.nextLine();
-
-            Optional<Etudiant> etudiant = etudiantDAO.obtenirTousLesUtilisateurs()
-                    .stream()
-                    .filter(e -> e.getNumeroDadhesion().equals(numeroAdhesion))
-                    .findFirst();
-
+            Optional<Etudiant> etudiant = etudiantDAO.trouverParNumeroDadhesion(numeroAdhesion);
             if (etudiant.isPresent()) {
-                afficherDetailsUtilisateur(etudiant.get());
-                return;
+                return Optional.of(etudiant.get());
             }
 
-            Optional<Professeur> professeur = professeurDAO.obtenirTousLesUtilisateurs()
-                    .stream()
-                    .filter(p -> p.getNumeroDadhesion().equals(numeroAdhesion))
-                    .findFirst();
-
+            Optional<Professeur> professeur = professeurDAO.trouverParNumeroDadhesion(numeroAdhesion);
             if (professeur.isPresent()) {
-                afficherDetailsUtilisateur(professeur.get());
-            } else {
-                System.out.println("Utilisateur non trouvé.");
+                return Optional.of(professeur.get());
             }
+
+            System.out.println("Utilisateur non trouvé.");
+            return Optional.empty();
 
         } catch (SQLException e) {
             System.out.println("Erreur lors de la recherche de l'utilisateur : " + e.getMessage());
+            return Optional.empty();
         }
     }
+
+
+
 
 }

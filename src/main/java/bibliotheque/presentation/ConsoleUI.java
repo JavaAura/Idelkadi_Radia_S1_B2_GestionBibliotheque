@@ -95,7 +95,7 @@ public class ConsoleUI {
             scanner.nextLine();
             switch (choix) {
                 case 1:
-                   bibliotheque_Service.ajouterDocument();
+                    bibliotheque_Service.ajouterDocument();
                     break;
                 case 2:
                     bibliotheque_Service.modifierDocument();
@@ -103,7 +103,8 @@ public class ConsoleUI {
                 case 3:
                     bibliotheque_Service.supprimerDocument();
                     break;
-                case 4: bibliotheque_Service.trouverUnDocument();
+                case 4:
+                    bibliotheque_Service.trouverUnDocument();
                     break;
                 case 5:
                     bibliotheque_Service.afficherTousLesDocuments();
@@ -135,7 +136,7 @@ public class ConsoleUI {
             scanner.nextLine();
             switch (choix) {
                 case 1:
-                  utilisateur_Service.ajouterUtilisateur();
+                    utilisateur_Service.ajouterUtilisateur();
                     break;
                 case 2:
                     utilisateur_Service.mettreAJourUtilisateur();
@@ -144,7 +145,7 @@ public class ConsoleUI {
                     utilisateur_Service.supprimerUtilisateur();
                     break;
                 case 4:
-                    utilisateur_Service.trouverUtilisateur();
+                    utilisateur_Service.afficherDetailsUtilisateur();
                     break;
                 case 5:
                     utilisateur_Service.afficherTousUtilisateurs();
@@ -161,12 +162,47 @@ public class ConsoleUI {
     }
 
     public static void gererEmprunts() {
-        System.out.println("\n---- Gérer les emprunts ----\n" +
-                "\n1- Emprunter un document" +
-                "\n2- Retourner un document" +
-                "\n3- Afficher les details d'un emprunt" +
-                "\n4- Afficher Tous les emprunts" +
-                "\n5- Quitter le sous-menu");
+        int choix;
+        do {
+            System.out.println("\n---- Gérer les emprunts ----\n" +
+                    "\n1- Emprunter un document" +
+                    "\n2- Retourner un document" +
+                    "\n3- Afficher les details d'un emprunt" +
+                    "\n4- Afficher Tous les emprunts" +
+                    "\n5- Quitter le sous-menu");
+
+            System.out.print("Veuillez entrer votre choix (1-6) : ");
+            choix = scanner.nextInt();
+            scanner.nextLine();
+
+
+            switch (choix) {
+                case 1:
+                    bibliotheque_Service.emprunterDocument();
+                    break;
+
+                case 2:
+                    //  retournerDocument();
+                    break;
+
+                case 3:
+                    //  afficherDetailsEmprunt();
+                    break;
+
+                case 4:
+                    //  afficherTousLesEmprunts();
+                    break;
+
+                case 5:
+                    System.out.println("Quitter le sous-menu...");
+                    return;
+
+                default:
+                    System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 5.");
+                    break;
+            }
+        } while (choix != 6);
+
     }
 
     public static void gererReservation() {

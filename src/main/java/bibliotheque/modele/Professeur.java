@@ -1,5 +1,7 @@
 package main.java.bibliotheque.modele;
 
+import java.util.Optional;
+
 public class Professeur extends Utilisateur {
 
     private String departement;
@@ -18,8 +20,14 @@ public Professeur(){}
         this.departement = departement;
     }
 
+    @Override
     public String toString() {
-        return String.format("Numéro d'adhésion: %s, Nom: %s, Âge: %d, Département: %s, Rôle: Professeur",
-                getNumeroDadhesion(), getNom(), getAge(), departement);
+        String numeroAdhesion = Optional.ofNullable(getNumeroDadhesion()).orElse("N/A");
+        String nom = Optional.ofNullable(getNom()).orElse("N/A");
+        String age = Optional.of(Integer.toString(getAge())).orElse("N/A");
+        String departement = Optional.ofNullable(getDepartement()).orElse("N/A");
+        return String.format("| %-29s | %-18s | %-4s | %-12s | %-10s |",
+                numeroAdhesion, nom, age, departement, "Professeur");
     }
+
 }

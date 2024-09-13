@@ -1,9 +1,7 @@
 package main.java.bibliotheque.service;
 
-import main.java.bibliotheque.DAO.Implementation.JournalDAOImpl;
-import main.java.bibliotheque.DAO.Implementation.LivreDAOImpl;
-import main.java.bibliotheque.DAO.Implementation.MagazineDAOImpl;
-import main.java.bibliotheque.DAO.Implementation.TheseDAOImpl;
+import main.java.bibliotheque.DAO.Implementation.*;
+import main.java.bibliotheque.interfaces.Empruntable;
 import main.java.bibliotheque.modele.*;
 import main.java.bibliotheque.utilitaire.InputValidator;
 import main.java.bibliotheque.utilitaire.ScannerUtil;
@@ -19,7 +17,7 @@ public class BibliothequeService {
     private static final MagazineDAOImpl magazineDAOImpl = new MagazineDAOImpl();
     private static final JournalDAOImpl journalDAOImpl = new JournalDAOImpl();
     private static final TheseDAOImpl theseDAOImpl = new TheseDAOImpl();
-
+    private EmpruntDAOImpl empruntDAOImpl = new EmpruntDAOImpl();
 
     public void ajouterDocument() {
         int typeDocument = 0;
@@ -455,4 +453,68 @@ public class BibliothequeService {
             }
         }
     }
+
+
+    public void emprunterDocument() {
+        Optional<Document> documentOptional = recupererDocumentParId();
+
+        if (documentOptional.isPresent()) {
+            Document document = documentOptional.get();
+
+            if (document.getStatut() == StatutDocument.DISPONIBLE) {
+                System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+                String numeroAdhesion = scanner.nextLine();
+
+                UtilisateurService utilisateurService = new UtilisateurService();
+                Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
+
+                if (utilisateurOptional.isPresent()) {
+                    Utilisateur utilisateur = utilisateurOptional.get();
+
+                    boolean peutEmprunter = (utilisateur instanceof Etudiant && !(document instanceof TheseUniversitaire)) ||
+                            (utilisateur instanceof Professeur);
+
+                    if (peutEmprunter) {
+                        if (document instanceof Empruntable) {
+                            ((Empruntable) document).emprunter();
+
+                            document.setStatut(StatutDocument.EMPRUNTE);
+
+                            try {
+                                empruntDAOImpl.ajouterEmprunt( utilisateur.getId(), document.getId());
+                            } catch (SQLException e) {
+                                System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
+                            }
+
+                            try {
+                                if (document instanceof Livre) {
+                                    livreDAOImpl.mettreAJourDocument((Livre) document);
+                                } else if (document instanceof Magazine) {
+                                    magazineDAOImpl.mettreAJourDocument((Magazine) document);
+                                } else if (document instanceof JournalScientifique) {
+                                    journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
+                                } else if (document instanceof TheseUniversitaire) {
+                                    theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
+                                }
+                            } catch (SQLException e) {
+                                System.out.println("Erreur lors de la mise à jour du document : " + e.getMessage());
+                            }
+
+                        } else {
+                            System.out.println("Ce document ne peut pas être emprunté.");
+                        }
+                    } else {
+                        System.out.println("Vous n'avez pas le droit d'emprunter ce document.");
+                    }
+                } else {
+                    System.out.println("Utilisateur non trouvé.");
+                }
+            } else {
+                System.out.println("Le document est déjà emprunté.");
+            }
+        } else {
+            System.out.println("Document non trouvé.");
+        }
+    }
+
 }

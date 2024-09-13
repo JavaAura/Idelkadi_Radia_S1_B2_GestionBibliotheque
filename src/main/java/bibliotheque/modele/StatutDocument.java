@@ -2,7 +2,7 @@ package main.java.bibliotheque.modele;
 
 public enum StatutDocument {
     DISPONIBLE("disponible"),
-    EMPREUNTE("emprunté");
+    EMPRUNTE("emprunté");
 
     private final String statut;
 

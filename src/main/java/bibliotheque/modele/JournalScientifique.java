@@ -1,11 +1,12 @@
 package main.java.bibliotheque.modele;
 
+import main.java.bibliotheque.interfaces.Empruntable;
 import main.java.bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class JournalScientifique extends Document{
+public class JournalScientifique extends Document implements Empruntable {
 
     private String domaineRecherche;
 
@@ -38,6 +39,25 @@ public class JournalScientifique extends Document{
 
         return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-10d |",id,
                 titre, auteur, datePublication, domaineRecherche, nombreDePages);
+    }
+
+    public void emprunter() {
+        if (getStatut() == StatutDocument.DISPONIBLE) {
+            setStatut(StatutDocument.EMPRUNTE);
+            System.out.println("Le journal a été emprunté.");
+        } else {
+            System.out.println("Le journal n'est pas disponible pour l'emprunt.");
+        }
+    }
+
+    @Override
+    public void retourner() {
+        if (getStatut() == StatutDocument.EMPRUNTE) {
+            setStatut(StatutDocument.DISPONIBLE);
+            System.out.println("Le journal a été retourné.");
+        } else {
+            System.out.println("Le journal n'a pas été emprunté.");
+        }
     }
 
 }

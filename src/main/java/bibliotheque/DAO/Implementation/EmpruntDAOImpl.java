@@ -1,0 +1,35 @@
+package main.java.bibliotheque.DAO.Implementation;
+
+import main.java.bibliotheque.DAO.DBConnection;
+import main.java.bibliotheque.DAO.EmpruntDAO;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class EmpruntDAOImpl implements EmpruntDAO {
+
+    private Connection connection;
+
+    public EmpruntDAOImpl() {
+        try {
+            this.connection = DBConnection.getInstance().getConnection();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void ajouterEmprunt(int utilisateurId, int documentId) throws SQLException {
+        String sql = "INSERT INTO emprunt (utilisateur_id, document_id, date_emprunt) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, utilisateurId);
+            statement.setInt(2, documentId);
+            statement.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
+        }
+    }
+
+}

@@ -1,8 +1,11 @@
 package main.java.bibliotheque.modele;
 
+import main.java.bibliotheque.interfaces.Empruntable;
+import main.java.bibliotheque.interfaces.Reservable;
+
 import java.time.LocalDate;
 
-public abstract class Document {
+public abstract class Document  {
     private int id;
     private String titre;
     private String auteur;
