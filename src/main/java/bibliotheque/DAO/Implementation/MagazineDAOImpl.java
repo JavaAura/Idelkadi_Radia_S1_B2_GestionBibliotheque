@@ -16,11 +16,8 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
     private static Connection connection;
 
     public MagazineDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

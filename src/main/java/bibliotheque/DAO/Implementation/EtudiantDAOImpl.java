@@ -18,11 +18,8 @@ public class EtudiantDAOImpl implements EtudiantDAO {
     private Connection connection;
 
     public EtudiantDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

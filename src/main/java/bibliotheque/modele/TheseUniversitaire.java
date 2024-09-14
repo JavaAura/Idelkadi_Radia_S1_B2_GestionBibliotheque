@@ -1,22 +1,23 @@
 package main.java.bibliotheque.modele;
 
 import main.java.bibliotheque.interfaces.Empruntable;
+import main.java.bibliotheque.interfaces.Reservable;
 import main.java.bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class TheseUniversitaire extends Document implements Empruntable {
+public class TheseUniversitaire extends Document implements Empruntable , Reservable {
     private String universite;
     private String domaine;
 
-    public TheseUniversitaire(String titre, String auteur, LocalDate datePublication, int nombreDePages,  String universite, String domaine) {
+    public TheseUniversitaire(String titre, String auteur, LocalDate datePublication, int nombreDePages, String universite, String domaine) {
         super(titre, auteur, datePublication, nombreDePages);
         this.universite = universite;
         this.domaine = domaine;
     }
 
-    public TheseUniversitaire(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages,  String universite, String domaine, String statut) {
+    public TheseUniversitaire(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages, String universite, String domaine, String statut) {
         super(id, titre, auteur, datePublication, nombreDePages, statut);
         this.universite = universite;
         this.domaine = domaine;
@@ -48,28 +49,28 @@ public class TheseUniversitaire extends Document implements Empruntable {
         String domaine = Optional.ofNullable(getDomaine()).orElse("N/A");
         int nombreDePages = getNombreDePages();
 
-        return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-20s | %-10d |",id,
+        return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-20s | %-10d |", id,
                 titre, auteur, datePublication, universite, domaine, nombreDePages);
     }
 
 
     public void emprunter() {
-        if (getStatut() == StatutDocument.DISPONIBLE) {
-            setStatut(StatutDocument.EMPRUNTE);
-            System.out.println("Le livre a été emprunté.");
-        } else {
-            System.out.println("Le livre n'est pas disponible pour l'emprunt.");
-        }
+            System.out.println("La thése a été emprunté.");
     }
 
     @Override
     public void retourner() {
-        if (getStatut() == StatutDocument.EMPRUNTE) {
-            setStatut(StatutDocument.DISPONIBLE);
-            System.out.println("Le livre a été retourné.");
-        } else {
-            System.out.println("Le livre n'a pas été emprunté.");
-        }
+        System.out.println("Le thése a été retourné.");
+
     }
 
+    @Override
+    public void reserver() {
+        System.out.println("La thése a été réservé avec succès.");
+    }
+
+    @Override
+    public void annuler() {
+        System.out.println("La réservation de la these a été annulée avec succès.");
+    }
 }

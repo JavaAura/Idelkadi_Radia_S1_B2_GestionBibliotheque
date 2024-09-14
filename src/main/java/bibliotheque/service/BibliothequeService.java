@@ -2,6 +2,7 @@ package main.java.bibliotheque.service;
 
 import main.java.bibliotheque.DAO.Implementation.*;
 import main.java.bibliotheque.interfaces.Empruntable;
+import main.java.bibliotheque.interfaces.Reservable;
 import main.java.bibliotheque.modele.*;
 import main.java.bibliotheque.utilitaire.InputValidator;
 import main.java.bibliotheque.utilitaire.ScannerUtil;
@@ -281,38 +282,6 @@ public class BibliothequeService {
         }
     }
 
-//    public Optional<Document> recupererDocumentParId() {
-//        try {
-//            System.out.print("Veuillez entrer l'ID du document : ");
-//            int idDocument = scanner.nextInt();
-//            scanner.nextLine();
-//
-//            List<Document> documents = new ArrayList<>();
-//
-//            livreDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-//            magazineDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-//            journalDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-//            theseDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-//
-//            if (!documents.isEmpty()) {
-//                Document documentTrouve = documents.get(0); // Il devrait y avoir un seul document avec cet ID
-//                System.out.println("Document trouvé : " + documentTrouve.toString());
-//                return Optional.of(documentTrouve);
-//            } else {
-//                System.out.println("Aucun document trouvé avec cet ID.");
-//                return Optional.empty();
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Erreur lors de la recherche du document : " + e.getMessage());
-//            return Optional.empty();
-//        } catch (InputMismatchException e) {
-//            System.out.println("Erreur : L'ID doit être un nombre entier.");
-//            scanner.nextLine();
-//            return Optional.empty();
-//        }
-//    }
-
     public void supprimerDocument() {
         Optional<Document> documentOptional = recupererDocumentParId();
 
@@ -458,7 +427,6 @@ public class BibliothequeService {
         }
     }
 
-
     public Optional<Document> recupererDocumentParId() {
         try {
             System.out.print("Veuillez entrer l'ID du document : ");
@@ -494,7 +462,6 @@ public class BibliothequeService {
         if (!documentOptional.isPresent()) return;
 
         Document document = documentOptional.get();
-        System.out.println(document.getStatut() +" "+StatutDocument.DISPONIBLE );
 
         if (document.getStatut() != StatutDocument.DISPONIBLE) {
             System.out.println("Le document est déjà emprunté.");
@@ -537,7 +504,7 @@ public class BibliothequeService {
             } else if (document instanceof TheseUniversitaire) {
                 theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
             }
-            System.out.println("Emprunt réussi.");
+            ((Empruntable) document).emprunter();
         } catch (SQLException e) {
             System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
         }
@@ -580,7 +547,7 @@ public class BibliothequeService {
             } else if (document instanceof TheseUniversitaire) {
                 theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
             }
-            System.out.println("Le document a été retourné avec succès.");
+            ((Empruntable) document).retourner();
         } catch (SQLException e) {
             System.out.println("Erreur lors de la gestion du retour du document : " + e.getMessage());
         }
@@ -614,7 +581,7 @@ public class BibliothequeService {
                     return;
                 }
                 reservationDAOImpl.ajouterReservation(utilisateur.getId(), document.getId());
-                System.out.println("Le document a été réservé avec succès.");
+                ((Reservable) document).reserver();
             } catch (SQLException e) {
                 System.out.println("Erreur lors de la gestion de la réservation : " + e.getMessage());
             }
@@ -637,7 +604,7 @@ public class BibliothequeService {
                     } else if (document instanceof TheseUniversitaire) {
                         theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
                     }
-                    System.out.println("Emprunt réussi.");
+                    ((Empruntable) document).emprunter();
                 } catch (SQLException e) {
                     System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
                 }
@@ -646,7 +613,6 @@ public class BibliothequeService {
             }
         }
     }
-
 
     public void annulerReservation() {
         Optional<Document> documentOptional = recupererDocumentParId();
@@ -673,7 +639,7 @@ public class BibliothequeService {
             }
 
             reservationDAOImpl.annulerReservation(document.getId(), utilisateur.getId());
-            System.out.println("La réservation a été annulée avec succès.");
+            ((Reservable) document).annuler();
         } catch (SQLException e) {
             System.out.println("Erreur lors de l'annulation de la réservation : " + e.getMessage());
         }

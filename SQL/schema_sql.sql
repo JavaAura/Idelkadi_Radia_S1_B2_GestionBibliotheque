@@ -1,6 +1,8 @@
 -- Création de la base de données
 CREATE DATABASE bibliotheque_db;
 
+-- Connexion à la base de données
+\c bibliotheque_db;
 
 -- Création de la table principale pour les documents
 CREATE TABLE document (
@@ -8,26 +10,23 @@ CREATE TABLE document (
     titre VARCHAR(255) NOT NULL,
     auteur VARCHAR(255) NOT NULL,
     date_publication DATE NOT NULL,
-	nombre_de_pages INT NOT NULL,
+    nombre_de_pages INT NOT NULL,
     statut VARCHAR(20) NOT NULL DEFAULT 'disponible' CHECK (statut IN ('disponible', 'emprunte'))
 );
 
--- Sous-classe Livre héritant de Document
+-- Création des sous-classes héritant de Document
 CREATE TABLE livre (
     isbn VARCHAR(20) UNIQUE
 ) INHERITS (document);
 
--- Sous-classe Magazine héritant de Document
 CREATE TABLE magazine (
     numero VARCHAR(50) UNIQUE
 ) INHERITS (document);
 
--- Sous-classe JournalScientifique héritant de Document
 CREATE TABLE journal_scientifique (
     domaine_recherche VARCHAR(255)
 ) INHERITS (document);
 
--- Sous-classe TheseUniversitaire héritant de Document
 CREATE TABLE these_universitaire (
     universite VARCHAR(255),
     domaine VARCHAR(255)
@@ -37,20 +36,18 @@ CREATE TABLE these_universitaire (
 CREATE TABLE utilisateur (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
-	age INT NOT NULL,
+    age INT NOT NULL,
     numero_dadhesion VARCHAR(50) UNIQUE
 );
 
--- Sous-classe Etudiant héritant de Utilisateur
+-- Création des sous-classes héritant de Utilisateur
 CREATE TABLE etudiant (
     niveau VARCHAR(255) NOT NULL
 ) INHERITS (utilisateur);
 
--- Sous-classe Professeur héritant de Utilisateur
 CREATE TABLE professeur (
     departement VARCHAR(255) NOT NULL
 ) INHERITS (utilisateur);
-
 
 -- Table pour gérer les emprunts
 CREATE TABLE emprunt (
@@ -70,37 +67,26 @@ CREATE TABLE reservation (
     date_annulation DATE
 );
 
--- Index pour optimiser la recherche par titre dans les documents
+-- Index pour optimiser la recherche
 CREATE INDEX idx_document_titre ON document(titre);
-
--- Index pour optimiser la recherche par identifiant dans les utilisateurs
 CREATE INDEX idx_utilisateur_identifiant ON utilisateur(numero_dadhesion);
 
-
-
+-- Vues pour vérifier l'existence des IDs
 CREATE VIEW vue_utilisateur_id AS
-SELECT id
-FROM etudiant
+SELECT id FROM etudiant
 UNION
-SELECT id
-FROM professeur;
-
-
+SELECT id FROM professeur;
 
 CREATE VIEW vue_document_id AS
-SELECT id
-FROM livre
+SELECT id FROM livre
 UNION
-SELECT id
-FROM magazine
+SELECT id FROM magazine
 UNION
-SELECT id
-FROM journal_scientifique
+SELECT id FROM journal_scientifique
 UNION
-SELECT id
-FROM these_universitaire;
+SELECT id FROM these_universitaire;
 
-
+-- Fonction et trigger pour vérifier l'existence d'un utilisateur avant l'insertion dans emprunt ou réservation
 CREATE OR REPLACE FUNCTION verifier_utilisateur_id_existe()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -111,8 +97,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE TRIGGER trigger_verifier_utilisateur_id
+CREATE TRIGGER trigger_verifier_utilisateur_id_emprunt
 BEFORE INSERT ON emprunt
 FOR EACH ROW
 EXECUTE FUNCTION verifier_utilisateur_id_existe();
@@ -122,10 +107,7 @@ BEFORE INSERT ON reservation
 FOR EACH ROW
 EXECUTE FUNCTION verifier_utilisateur_id_existe();
 
-
-
-
-
+-- Fonction et trigger pour vérifier l'existence d'un document avant l'insertion dans emprunt ou réservation
 CREATE OR REPLACE FUNCTION verifier_document_id_existe()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -136,20 +118,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER trigger_verifier_document_id_emprunt
+BEFORE INSERT ON emprunt
+FOR EACH ROW
+EXECUTE FUNCTION verifier_document_id_existe();
+
 CREATE TRIGGER trigger_verifier_document_id_reservation
 BEFORE INSERT ON reservation
 FOR EACH ROW
 EXECUTE FUNCTION verifier_document_id_existe();
 
-CREATE TRIGGER trigger_verifier_document_id
-BEFORE INSERT ON emprunt
-FOR EACH ROW
-EXECUTE FUNCTION verifier_document_id_existe();
-
-
-ALTER TABLE emprunt DROP CONSTRAINT emprunt_utilisateur_id_fkey;
-ALTER TABLE emprunt DROP CONSTRAINT emprunt_document_id_fkey;
-
-ALTER TABLE reservation DROP CONSTRAINT reservation_utilisateur_id_fkey;
-ALTER TABLE reservation DROP CONSTRAINT reservation_document_id_fkey;
-
+-- Suppression des contraintes de clé étrangère existantes
+ALTER TABLE emprunt DROP CONSTRAINT IF EXISTS emprunt_utilisateur_id_fkey;
+ALTER TABLE emprunt DROP CONSTRAINT IF EXISTS emprunt_document_id_fkey;
+ALTER TABLE reservation DROP CONSTRAINT IF EXISTS reservation_utilisateur_id_fkey;
+ALTER TABLE reservation DROP CONSTRAINT IF EXISTS reservation_document_id_fkey;

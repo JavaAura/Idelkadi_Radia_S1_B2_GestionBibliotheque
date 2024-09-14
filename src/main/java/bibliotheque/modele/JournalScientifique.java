@@ -1,12 +1,13 @@
 package main.java.bibliotheque.modele;
 
 import main.java.bibliotheque.interfaces.Empruntable;
+import main.java.bibliotheque.interfaces.Reservable;
 import main.java.bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class JournalScientifique extends Document implements Empruntable {
+public class JournalScientifique extends Document implements Empruntable , Reservable {
 
     private String domaineRecherche;
 
@@ -15,8 +16,8 @@ public class JournalScientifique extends Document implements Empruntable {
         this.domaineRecherche = domaineRecherche;
     }
 
-    public JournalScientifique(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages, String statut , String domaineRecherche) {
-        super(id,titre, auteur, datePublication, nombreDePages, statut);
+    public JournalScientifique(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages, String statut, String domaineRecherche) {
+        super(id, titre, auteur, datePublication, nombreDePages, statut);
         this.domaineRecherche = domaineRecherche;
     }
 
@@ -37,27 +38,30 @@ public class JournalScientifique extends Document implements Empruntable {
         String domaineRecherche = Optional.ofNullable(getDomaineRecherche()).orElse("N/A");
         int nombreDePages = getNombreDePages();
 
-        return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-10d |",id,
+        return String.format("| %-10d | %-25s | %-15s | %-15s | %-20s | %-10d |", id,
                 titre, auteur, datePublication, domaineRecherche, nombreDePages);
     }
 
     public void emprunter() {
-        if (getStatut() == StatutDocument.DISPONIBLE) {
-            setStatut(StatutDocument.EMPRUNTE);
-            System.out.println("Le journal a été emprunté.");
-        } else {
-            System.out.println("Le journal n'est pas disponible pour l'emprunt.");
-        }
+
+        System.out.println("Le journal a été emprunté.");
+
     }
 
     @Override
     public void retourner() {
-        if (getStatut() == StatutDocument.EMPRUNTE) {
-            setStatut(StatutDocument.DISPONIBLE);
-            System.out.println("Le journal a été retourné.");
-        } else {
-            System.out.println("Le journal n'a pas été emprunté.");
-        }
+
+        System.out.println("Le journal a été retourné.");
+
     }
 
+    @Override
+    public void reserver() {
+        System.out.println("Le journal a été réservé avec succès.");
+    }
+
+    @Override
+    public void annuler() {
+        System.out.println("La réservation de le journal a été annulée avec succès.");
+    }
 }

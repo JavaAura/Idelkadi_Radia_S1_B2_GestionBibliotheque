@@ -16,11 +16,8 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
     private static Connection connection;
 
     public LivreDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

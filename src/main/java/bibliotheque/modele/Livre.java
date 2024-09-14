@@ -1,12 +1,13 @@
 package main.java.bibliotheque.modele;
 
 import main.java.bibliotheque.interfaces.Empruntable;
+import main.java.bibliotheque.interfaces.Reservable;
 import main.java.bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class Livre extends Document implements Empruntable{
+public class Livre extends Document implements Empruntable , Reservable {
     private String isbn;
 
     public Livre(String titre, String auteur, LocalDate datePublication, int nombreDePages, String isbn) {
@@ -14,8 +15,8 @@ public class Livre extends Document implements Empruntable{
         this.isbn = isbn;
     }
 
-    public Livre(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages,String statut, String isbn) {
-        super(id,titre, auteur, datePublication, nombreDePages , statut);
+    public Livre(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages, String statut, String isbn) {
+        super(id, titre, auteur, datePublication, nombreDePages, statut);
         this.isbn = isbn;
     }
 
@@ -36,26 +37,29 @@ public class Livre extends Document implements Empruntable{
         String isbn = Optional.ofNullable(getIsbn()).orElse("N/A");
         int nombreDePages = getNombreDePages();
 
-        return String.format("| %-10d  | %-25s | %-15s | %-15s | %-12s | %-10d |",id , titre, auteur, datePublication, isbn, nombreDePages);
+        return String.format("| %-10d  | %-25s | %-15s | %-15s | %-12s | %-10d |", id, titre, auteur, datePublication, isbn, nombreDePages);
     }
 
     public void emprunter() {
-        if (getStatut() == StatutDocument.DISPONIBLE) {
-            setStatut(StatutDocument.EMPRUNTE);
-            System.out.println("Le livre a été emprunté.");
-        } else {
-            System.out.println("Le livre n'est pas disponible pour l'emprunt.");
-        }
+
+        System.out.println("Le livre a été emprunté.");
+
     }
 
 
     public void retourner() {
-        if (getStatut() == StatutDocument.EMPRUNTE) {
-            setStatut(StatutDocument.DISPONIBLE);
-            System.out.println("Le livre a été retourné.");
-        } else {
-            System.out.println("Le livre n'a pas été emprunté.");
-        }
+
+        System.out.println("Le livre a été retourné.");
+
     }
 
+    @Override
+    public void reserver() {
+        System.out.println("Le livre a été réservé avec succès.");
+    }
+
+    @Override
+    public void annuler() {
+        System.out.println("La réservation de le livre a été annulée avec succès.");
+    }
 }

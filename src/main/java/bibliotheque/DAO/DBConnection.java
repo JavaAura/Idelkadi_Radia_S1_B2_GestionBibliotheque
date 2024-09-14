@@ -13,21 +13,24 @@ public class DBConnection {
     private final Connection connection;
 
     private DBConnection() throws SQLException, IOException {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("main/resources/application.properties")){
-            Properties props = new Properties();
+        Properties props = new Properties();
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("main/resources/application.properties")) {
             if (input == null) {
                 throw new IOException("Fichier de configuration non trouvé.");
             }
             props.load(input);
+        }
 
-            String url = props.getProperty("db.url");
-            String username = props.getProperty("db.username");
-            String password = props.getProperty("db.password");
+        String url = props.getProperty("db.url");
+        String username = props.getProperty("db.username");
+        String password = props.getProperty("db.password");
 
+        try {
             this.connection = DriverManager.getConnection(url, username, password);
-
+            System.out.println("Connexion à la base de données établie.");
         } catch (SQLException ex) {
-            throw  new SQLException("Échec de la création de la connexion à la base de données : " + ex.getMessage());
+            throw new SQLException("Échec de la création de la connexion à la base de données : " + ex.getMessage(), ex);
         }
     }
 
@@ -35,13 +38,21 @@ public class DBConnection {
         return connection;
     }
 
-    public static DBConnection getInstance() throws SQLException, IOException {
-        if (instance == null) {
-            instance = new DBConnection();
-        } else if (instance.getConnection().isClosed()) {
-            instance = new DBConnection();
+    public static DBConnection getInstance() {
+        DBConnection result = instance;
+        if (result == null) {
+            synchronized (DBConnection.class) {
+                result = instance;
+                if (result == null) {
+                    try {
+                        instance = result = new DBConnection();
+                    } catch (SQLException | IOException ex) {
+                        throw new RuntimeException("Échec de l'initialisation de la connexion à la base de données : " + ex.getMessage(), ex);
+                    }
+                }
+            }
         }
-        return instance;
+        return result;
     }
 
     public void closeConnection() {

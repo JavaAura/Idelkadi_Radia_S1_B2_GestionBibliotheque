@@ -15,11 +15,8 @@ public class TheseDAOImpl implements DocumentDAO<TheseUniversitaire> {
     private static Connection connection;
 
     public TheseDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

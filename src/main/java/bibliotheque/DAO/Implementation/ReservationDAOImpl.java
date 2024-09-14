@@ -13,11 +13,8 @@ public class ReservationDAOImpl{
     private Connection connection;
 
     public ReservationDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public boolean verifierReservation(int documentId, int utilisateurId) throws SQLException {

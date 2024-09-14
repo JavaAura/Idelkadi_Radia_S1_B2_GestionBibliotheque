@@ -16,11 +16,8 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
     private static Connection connection;
 
     public JournalDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

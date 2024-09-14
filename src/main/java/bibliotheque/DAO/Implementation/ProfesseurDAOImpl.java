@@ -15,11 +15,8 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
     private Connection connection;
 
     public ProfesseurDAOImpl() {
-        try {
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

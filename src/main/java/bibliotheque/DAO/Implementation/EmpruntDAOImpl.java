@@ -13,12 +13,10 @@ public class EmpruntDAOImpl implements EmpruntDAO {
 
     private Connection connection;
 
-    public EmpruntDAOImpl() {
-        try {
+    public EmpruntDAOImpl()  {
+
             this.connection = DBConnection.getInstance().getConnection();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void ajouterEmprunt(int utilisateurId, int documentId) throws SQLException {

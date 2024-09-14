@@ -28,7 +28,7 @@ public class ConsoleUI {
 
             do {
                 afficherMenu();
-                System.out.print("Veuillez entrer votre choix (1-6) : ");
+                System.out.print("Veuillez entrer votre choix (1-5) : ");
                 choix = scanner.nextInt();
                 switch (choix) {
                     case 1:
@@ -38,33 +38,23 @@ public class ConsoleUI {
                         gererUtilisateurs();
                         break;
                     case 3:
-//                        bibliotheque_Service.rechercherDocument();
-                        break;
-                    case 4:
                         gererEmprunts();
                         break;
-                    case 5:
+                    case 4:
                         gererReservation();
                         break;
-                    case 6:
+                    case 5:
                         System.out.println("A bientôt !!");
-                        System.out.flush();
                         break;
                     default:
                         System.out.println("Choix invalide merci de réessayer");
                         break;
                 }
-            } while (choix != 6);
+            } while (choix != 5);
         } catch (Exception e) {
             System.out.println("error :" + e.getMessage());
         } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    System.out.println("error :" + e.getMessage());
-                }
-            }
+            DBConnection.getInstance().closeConnection();
         }
 
     }
@@ -74,10 +64,9 @@ public class ConsoleUI {
         System.out.println("==== Menu ====\n" +
                 "\n1- Gérer les documents" +
                 "\n2- Gérer les utilisateurs" +
-                "\n3- Rechercher un document" +
-                "\n4- Gérer les emprunts" +
-                "\n5- Gérer les réservations" +
-                "\n6- Quitter le programme");
+                "\n3- Gérer les emprunts" +
+                "\n4- Gérer les réservations" +
+                "\n5- Quitter le programme");
     }
 
     public static void gererDocuments() {
@@ -110,8 +99,7 @@ public class ConsoleUI {
                     bibliotheque_Service.afficherTousLesDocuments();
                     break;
                 case 6:
-                    System.out.flush();
-                    break;
+                    return;
                 default:
                     System.out.println("Choix invalide merci de réessayer");
                     break;
@@ -151,8 +139,7 @@ public class ConsoleUI {
                     utilisateur_Service.afficherTousUtilisateurs();
                     break;
                 case 6:
-                    System.out.flush();
-                    break;
+                    return;
                 default:
                     System.out.println("Choix invalide merci de réessayer");
                     break;
@@ -184,14 +171,13 @@ public class ConsoleUI {
                     break;
 
                 case 3:
-                    System.out.println("Quitter le sous-menu...");
                     return;
 
                 default:
-                    System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 5.");
+                    System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 3.");
                     break;
             }
-        } while (choix != 6);
+        } while (choix != 3);
 
     }
 
@@ -202,7 +188,7 @@ public class ConsoleUI {
         System.out.println("\n---- Gérer les réservations ----\n" +
                 "\n1- Réserver un document" +
                 "\n2- Annuler une réservation" +
-                "\n5- Quitter le sous-menu");
+                "\n3- Quitter le sous-menu");
 
         System.out.print("Veuillez entrer votre choix (1-3) : ");
         choix = scanner.nextInt();
@@ -218,13 +204,12 @@ public class ConsoleUI {
                 break;
 
             case 3:
-                System.out.println("Quitter le sous-menu...");
                 return;
 
             default:
-                System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 5.");
+                System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 3.");
                 break;
         }
-    } while (choix != 6);
+    } while (choix != 3);
     }
 }
