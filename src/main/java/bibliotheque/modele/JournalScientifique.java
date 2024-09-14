@@ -15,8 +15,8 @@ public class JournalScientifique extends Document implements Empruntable {
         this.domaineRecherche = domaineRecherche;
     }
 
-    public JournalScientifique(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages, String domaineRecherche) {
-        super(id,titre, auteur, datePublication, nombreDePages);
+    public JournalScientifique(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages, String statut , String domaineRecherche) {
+        super(id,titre, auteur, datePublication, nombreDePages, statut);
         this.domaineRecherche = domaineRecherche;
     }
 

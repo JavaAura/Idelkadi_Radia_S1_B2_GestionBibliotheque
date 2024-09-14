@@ -14,8 +14,8 @@ public class Livre extends Document implements Empruntable{
         this.isbn = isbn;
     }
 
-    public Livre(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages, String isbn) {
-        super(id,titre, auteur, datePublication, nombreDePages);
+    public Livre(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages,String statut, String isbn) {
+        super(id,titre, auteur, datePublication, nombreDePages , statut);
         this.isbn = isbn;
     }
 

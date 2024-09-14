@@ -16,8 +16,8 @@ public class TheseUniversitaire extends Document implements Empruntable {
         this.domaine = domaine;
     }
 
-    public TheseUniversitaire(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages,  String universite, String domaine) {
-        super(id, titre, auteur, datePublication, nombreDePages);
+    public TheseUniversitaire(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages,  String universite, String domaine, String statut) {
+        super(id, titre, auteur, datePublication, nombreDePages, statut);
         this.universite = universite;
         this.domaine = domaine;
     }

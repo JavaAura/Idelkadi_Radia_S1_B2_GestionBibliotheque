@@ -39,14 +39,15 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
     }
 
     public void mettreAJourDocument(JournalScientifique journal) throws SQLException {
-        String sql = "UPDATE journal_scientifique SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, domaine_recherche = ? WHERE id = ?";
+        String sql = "UPDATE journal_scientifique SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, domaine_recherche = ? , statut = ?  WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, journal.getTitre());
             stmt.setString(2, journal.getAuteur());
             stmt.setDate(3, Date.valueOf(journal.getDatePublication()));
             stmt.setInt(4, journal.getNombreDePages());
             stmt.setString(5, journal.getDomaineRecherche());
-            stmt.setInt(6, journal.getId());
+            stmt.setString(6, journal.getStatut().toString().toLowerCase());
+            stmt.setInt(7, journal.getId());
             stmt.executeUpdate();
         }
     }
@@ -75,6 +76,7 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
+                        resultSet.getString("statut"),
                         resultSet.getString("domaine_recherche")
                 );
                 journaux.add(journal_scientifique);
@@ -96,6 +98,7 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
                             rs.getString("auteur"),
                             rs.getDate("date_publication").toLocalDate(),
                             rs.getInt("nombre_de_pages"),
+                            rs.getString("statut"),
                             rs.getString("domaine_recherche")
                     );
                     return Optional.of(journal);
@@ -120,6 +123,7 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
+                        resultSet.getString("statut"),
                         resultSet.getString("domaine_recherche")
                 );
                 journaux.add(journal_scientifique);

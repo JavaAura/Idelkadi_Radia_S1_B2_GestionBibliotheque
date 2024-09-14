@@ -9,7 +9,7 @@ CREATE TABLE document (
     auteur VARCHAR(255) NOT NULL,
     date_publication DATE NOT NULL,
 	nombre_de_pages INT NOT NULL,
-	statut VARCHAR(20) NOT NULL DEFAULT 'disponible' CHECK (statut IN ('disponible', 'emprunté'))
+    statut VARCHAR(20) NOT NULL DEFAULT 'disponible' CHECK (statut IN ('disponible', 'emprunte'))
 );
 
 -- Sous-classe Livre héritant de Document
@@ -75,3 +75,81 @@ CREATE INDEX idx_document_titre ON document(titre);
 
 -- Index pour optimiser la recherche par identifiant dans les utilisateurs
 CREATE INDEX idx_utilisateur_identifiant ON utilisateur(numero_dadhesion);
+
+
+
+CREATE VIEW vue_utilisateur_id AS
+SELECT id
+FROM etudiant
+UNION
+SELECT id
+FROM professeur;
+
+
+
+CREATE VIEW vue_document_id AS
+SELECT id
+FROM livre
+UNION
+SELECT id
+FROM magazine
+UNION
+SELECT id
+FROM journal_scientifique
+UNION
+SELECT id
+FROM these_universitaire;
+
+
+CREATE OR REPLACE FUNCTION verifier_utilisateur_id_existe()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM vue_utilisateur_id WHERE id = NEW.utilisateur_id) THEN
+        RAISE EXCEPTION 'L''utilisateur avec id % n''existe pas.', NEW.utilisateur_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_verifier_utilisateur_id
+BEFORE INSERT ON emprunt
+FOR EACH ROW
+EXECUTE FUNCTION verifier_utilisateur_id_existe();
+
+CREATE TRIGGER trigger_verifier_utilisateur_id_reservation
+BEFORE INSERT ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION verifier_utilisateur_id_existe();
+
+
+
+
+
+CREATE OR REPLACE FUNCTION verifier_document_id_existe()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM vue_document_id WHERE id = NEW.document_id) THEN
+        RAISE EXCEPTION 'Le document avec id % n''existe pas.', NEW.document_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_verifier_document_id_reservation
+BEFORE INSERT ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION verifier_document_id_existe();
+
+CREATE TRIGGER trigger_verifier_document_id
+BEFORE INSERT ON emprunt
+FOR EACH ROW
+EXECUTE FUNCTION verifier_document_id_existe();
+
+
+ALTER TABLE emprunt DROP CONSTRAINT emprunt_utilisateur_id_fkey;
+ALTER TABLE emprunt DROP CONSTRAINT emprunt_document_id_fkey;
+
+ALTER TABLE reservation DROP CONSTRAINT reservation_utilisateur_id_fkey;
+ALTER TABLE reservation DROP CONSTRAINT reservation_document_id_fkey;
+

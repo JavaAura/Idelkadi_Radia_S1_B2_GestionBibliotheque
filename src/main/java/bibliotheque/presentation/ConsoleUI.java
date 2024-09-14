@@ -196,11 +196,35 @@ public class ConsoleUI {
     }
 
     public static void gererReservation() {
+
+        int choix;
+        do {
         System.out.println("\n---- Gérer les réservations ----\n" +
                 "\n1- Réserver un document" +
                 "\n2- Annuler une réservation" +
-                "\n3- Afficher les details dune réservation" +
-                "\n4- Afficher Tous les réservations" +
                 "\n5- Quitter le sous-menu");
+
+        System.out.print("Veuillez entrer votre choix (1-3) : ");
+        choix = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (choix) {
+            case 1:
+                bibliotheque_Service.reserverDocument();
+                break;
+
+            case 2:
+                bibliotheque_Service.annulerReservation();
+                break;
+
+            case 3:
+                System.out.println("Quitter le sous-menu...");
+                return;
+
+            default:
+                System.out.println("Choix invalide. Veuillez entrer un nombre entre 1 et 5.");
+                break;
+        }
+    } while (choix != 6);
     }
 }

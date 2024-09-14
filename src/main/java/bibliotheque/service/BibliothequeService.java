@@ -17,7 +17,9 @@ public class BibliothequeService {
     private static final MagazineDAOImpl magazineDAOImpl = new MagazineDAOImpl();
     private static final JournalDAOImpl journalDAOImpl = new JournalDAOImpl();
     private static final TheseDAOImpl theseDAOImpl = new TheseDAOImpl();
-    private EmpruntDAOImpl empruntDAOImpl = new EmpruntDAOImpl();
+    private static final EmpruntDAOImpl empruntDAOImpl = new EmpruntDAOImpl();
+    private static final ReservationDAOImpl reservationDAOImpl = new ReservationDAOImpl();
+
 
     public void ajouterDocument() {
         int typeDocument = 0;
@@ -228,7 +230,7 @@ public class BibliothequeService {
 
         if (!livres.isEmpty()) {
             System.out.println("\n*** LIVRES ***");
-            System.out.println("| id   | Titre                      | Auteur         | Date Publication | ISBN          | Nombre de Pages |");
+            System.out.println("| id           | Titre                      | Auteur         | Date Publication | ISBN          | Nombre de Pages |");
             System.out.println("----------------------------------------------------------------------------------------------------");
             for (Livre livre : livres) {
                 System.out.println(livre.toString());
@@ -237,7 +239,7 @@ public class BibliothequeService {
 
         if (!magazines.isEmpty()) {
             System.out.println("\n*** MAGAZINES ***");
-            System.out.println("| id   | Titre                      | Auteur         | Date Publication | Numéro         | Nombre de Pages |");
+            System.out.println("| id           | Titre                      | Auteur         | Date Publication | Numéro         | Nombre de Pages |");
             System.out.println("----------------------------------------------------------------------------------------------------");
             for (Magazine magazine : magazines) {
                 System.out.println(magazine.toString());
@@ -246,7 +248,7 @@ public class BibliothequeService {
 
         if (!journaux.isEmpty()) {
             System.out.println("\n*** JOURNAUX SCIENTIFIQUES ***");
-            System.out.println("| Titre                      | Auteur         | Date Publication | Domaine Recherche      | Nombre de Pages |");
+            System.out.println("| id           | Titre                      | Auteur         | Date Publication | Domaine Recherche      | Nombre de Pages |");
             System.out.println("----------------------------------------------------------------------------------------------------------");
             for (JournalScientifique journal : journaux) {
                 System.out.println(journal.toString());
@@ -255,7 +257,7 @@ public class BibliothequeService {
 
         if (!theses.isEmpty()) {
             System.out.println("\n*** THÈSES UNIVERSITAIRES ***");
-            System.out.println("| id   | Titre                      | Auteur         | Date Publication | Université             | Domaine               | Nombre de Pages |");
+            System.out.println("| id           | Titre                      | Auteur         | Date Publication | Université             | Domaine               | Nombre de Pages |");
             System.out.println("--------------------------------------------------------------------------------------------------------------");
             for (TheseUniversitaire these : theses) {
                 System.out.println(these.toString());
@@ -279,37 +281,37 @@ public class BibliothequeService {
         }
     }
 
-    public Optional<Document> recupererDocumentParId() {
-        try {
-            System.out.print("Veuillez entrer l'ID du document : ");
-            int idDocument = scanner.nextInt();
-            scanner.nextLine();
-
-            List<Document> documents = new ArrayList<>();
-
-            livreDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-            magazineDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-            journalDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-            theseDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
-
-            if (!documents.isEmpty()) {
-                Document documentTrouve = documents.get(0); // Il devrait y avoir un seul document avec cet ID
-                System.out.println("Document trouvé : " + documentTrouve.toString());
-                return Optional.of(documentTrouve);
-            } else {
-                System.out.println("Aucun document trouvé avec cet ID.");
-                return Optional.empty();
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la recherche du document : " + e.getMessage());
-            return Optional.empty();
-        } catch (InputMismatchException e) {
-            System.out.println("Erreur : L'ID doit être un nombre entier.");
-            scanner.nextLine();
-            return Optional.empty();
-        }
-    }
+//    public Optional<Document> recupererDocumentParId() {
+//        try {
+//            System.out.print("Veuillez entrer l'ID du document : ");
+//            int idDocument = scanner.nextInt();
+//            scanner.nextLine();
+//
+//            List<Document> documents = new ArrayList<>();
+//
+//            livreDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+//            magazineDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+//            journalDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+//            theseDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+//
+//            if (!documents.isEmpty()) {
+//                Document documentTrouve = documents.get(0); // Il devrait y avoir un seul document avec cet ID
+//                System.out.println("Document trouvé : " + documentTrouve.toString());
+//                return Optional.of(documentTrouve);
+//            } else {
+//                System.out.println("Aucun document trouvé avec cet ID.");
+//                return Optional.empty();
+//            }
+//
+//        } catch (SQLException e) {
+//            System.out.println("Erreur lors de la recherche du document : " + e.getMessage());
+//            return Optional.empty();
+//        } catch (InputMismatchException e) {
+//            System.out.println("Erreur : L'ID doit être un nombre entier.");
+//            scanner.nextLine();
+//            return Optional.empty();
+//        }
+//    }
 
     public void supprimerDocument() {
         Optional<Document> documentOptional = recupererDocumentParId();
@@ -399,7 +401,7 @@ public class BibliothequeService {
                     if (!nouvelIsbn.isEmpty() && InputValidator.isValidISBN(nouvelIsbn)) {
                         livre.setIsbn(nouvelIsbn);
                     }
-
+                    livre.setStatut(livre.getStatut());
                     livreDAOImpl.mettreAJourDocument(livre);
                     System.out.println("Livre mis à jour avec succès.");
 
@@ -411,6 +413,7 @@ public class BibliothequeService {
                     if (!nouveauNumero.isEmpty() && InputValidator.isValidString(nouveauNumero)) {
                         magazine.setNumero(nouveauNumero);
                     }
+                    magazine.setStatut(magazine.getStatut());
 
                     magazineDAOImpl.mettreAJourDocument(magazine);
                     System.out.println("Magazine mis à jour avec succès.");
@@ -423,6 +426,7 @@ public class BibliothequeService {
                     if (!nouveauDomaineRecherche.isEmpty() && InputValidator.isValidString(nouveauDomaineRecherche)) {
                         journal.setDomaineRecherche(nouveauDomaineRecherche);
                     }
+                    journal.setStatut(journal.getStatut());
 
                     journalDAOImpl.mettreAJourDocument(journal);
                     System.out.println("Journal scientifique mis à jour avec succès.");
@@ -441,7 +445,7 @@ public class BibliothequeService {
                     if (!nouveauDomaine.isEmpty() && InputValidator.isValidString(nouveauDomaine)) {
                         these.setDomaine(nouveauDomaine);
                     }
-
+                    these.setStatut(these.getStatut());
                     theseDAOImpl.mettreAJourDocument(these);
                     System.out.println("Thèse universitaire mise à jour avec succès.");
 
@@ -455,77 +459,51 @@ public class BibliothequeService {
     }
 
 
-    public void emprunterDocument() {
-        Optional<Document> documentOptional = recupererDocumentParId();
+    public Optional<Document> recupererDocumentParId() {
+        try {
+            System.out.print("Veuillez entrer l'ID du document : ");
+            int idDocument = scanner.nextInt();
+            scanner.nextLine();
 
-        if (documentOptional.isPresent()) {
-            Document document = documentOptional.get();
+            List<Document> documents = new ArrayList<>();
+            livreDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+            magazineDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+            journalDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
+            theseDAOImpl.obtenirDocumentParId(idDocument).ifPresent(documents::add);
 
-            if (document.getStatut() == StatutDocument.DISPONIBLE) {
-                System.out.print("Veuillez entrer votre numéro d'adhésion : ");
-                String numeroAdhesion = scanner.nextLine();
-
-                UtilisateurService utilisateurService = new UtilisateurService();
-                Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
-
-                if (utilisateurOptional.isPresent()) {
-                    Utilisateur utilisateur = utilisateurOptional.get();
-
-                    boolean peutEmprunter = (utilisateur instanceof Etudiant && !(document instanceof TheseUniversitaire)) ||
-                            (utilisateur instanceof Professeur);
-
-                    if (peutEmprunter) {
-                        if (document instanceof Empruntable) {
-                            ((Empruntable) document).emprunter();
-
-                            document.setStatut(StatutDocument.EMPRUNTE);
-
-                            try {
-                                empruntDAOImpl.ajouterEmprunt(utilisateur.getId(), document.getId());
-                            } catch (SQLException e) {
-                                System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
-                            }
-
-                            try {
-                                if (document instanceof Livre) {
-                                    livreDAOImpl.mettreAJourDocument((Livre) document);
-                                } else if (document instanceof Magazine) {
-                                    magazineDAOImpl.mettreAJourDocument((Magazine) document);
-                                } else if (document instanceof JournalScientifique) {
-                                    journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
-                                } else if (document instanceof TheseUniversitaire) {
-                                    theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
-                                }
-                                ((Empruntable) document).emprunter();
-                            } catch (SQLException e) {
-                                System.out.println("Erreur lors de la mise à jour du document : " + e.getMessage());
-                            }
-
-                        } else {
-                            System.out.println("Ce document ne peut pas être emprunté.");
-                        }
-                    } else {
-                        System.out.println("Vous n'avez pas le droit d'emprunter ce document.");
-                    }
-                } else {
-                    System.out.println("Utilisateur non trouvé.");
-                }
+            if (!documents.isEmpty()) {
+                Document documentTrouve = documents.get(0);
+                System.out.println("Document trouvé : " + documentTrouve.toString());
+                return Optional.of(documentTrouve);
             } else {
-                System.out.println("Le document est déjà emprunté.");
+                System.out.println("Aucun document trouvé avec cet ID.");
+                return Optional.empty();
             }
-        } else {
-            System.out.println("Document non trouvé.");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la recherche du document : " + e.getMessage());
+            return Optional.empty();
+        } catch (InputMismatchException e) {
+            System.out.println("Erreur : L'ID doit être un nombre entier.");
+            scanner.nextLine();
+            return Optional.empty();
         }
     }
 
+    public void emprunterDocument() {
+        Optional<Document> documentOptional = recupererDocumentParId();
+        if (!documentOptional.isPresent()) return;
 
-    public void retournerDocument() {
+        Document document = documentOptional.get();
+        System.out.println(document.getStatut() +" "+StatutDocument.DISPONIBLE );
+
+        if (document.getStatut() != StatutDocument.DISPONIBLE) {
+            System.out.println("Le document est déjà emprunté.");
+            return;
+        }
 
         System.out.print("Veuillez entrer votre numéro d'adhésion : ");
         String numeroAdhesion = scanner.nextLine();
 
-        Optional<Document> documentOptional = recupererDocumentParId();
-        Document document = documentOptional.get();
 
         UtilisateurService utilisateurService = new UtilisateurService();
         Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
@@ -536,31 +514,170 @@ public class BibliothequeService {
 
         Utilisateur utilisateur = utilisateurOptional.get();
 
+
+        if (utilisateur instanceof Etudiant && document instanceof TheseUniversitaire) {
+            System.out.println("Vous n'avez pas le droit d'emprunter ce document.");
+            return;
+        }
+
+        if (!(document instanceof Empruntable)) {
+            System.out.println("Ce document ne peut pas être emprunté.");
+            return;
+        }
+
         try {
-            boolean empruntExistant = empruntDAOImpl.verifierEmprunt(document.getId(), utilisateur.getId());
+            empruntDAOImpl.ajouterEmprunt(utilisateur.getId(), document.getId());
+            document.setStatut(StatutDocument.EMPRUNTE);
+            if (document instanceof Livre) {
+                livreDAOImpl.mettreAJourDocument((Livre) document);
+            } else if (document instanceof Magazine) {
+                magazineDAOImpl.mettreAJourDocument((Magazine) document);
+            } else if (document instanceof JournalScientifique) {
+                journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
+            } else if (document instanceof TheseUniversitaire) {
+                theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
+            }
+            System.out.println("Emprunt réussi.");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
+        }
+    }
 
-            if (empruntExistant) {
-                empruntDAOImpl.retournerEmprunt(document.getId(), utilisateur.getId());
+    public void retournerDocument() {
+        System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+        String numeroAdhesion = scanner.nextLine();
 
-                document.setStatut(StatutDocument.DISPONIBLE);
-                if (document instanceof Livre) {
-                    livreDAOImpl.mettreAJourDocument((Livre) document);
-                } else if (document instanceof Magazine) {
-                    magazineDAOImpl.mettreAJourDocument((Magazine) document);
-                } else if (document instanceof JournalScientifique) {
-                    journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
-                } else if (document instanceof TheseUniversitaire) {
-                    theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
-                }
+        Optional<Document> documentOptional = recupererDocumentParId();
+        if (!documentOptional.isPresent()) return;
 
-                System.out.println("Le document a été retourné avec succès.");
-            } else {
+        Document document = documentOptional.get();
+
+
+        UtilisateurService utilisateurService = new UtilisateurService();
+        Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
+        if (!utilisateurOptional.isPresent()) {
+            System.out.println("Utilisateur non trouvé.");
+            return;
+        }
+
+        Utilisateur utilisateur = utilisateurOptional.get();
+
+
+        try {
+            if (!empruntDAOImpl.verifierEmprunt(document.getId(), utilisateur.getId())) {
                 System.out.println("Aucun emprunt trouvé pour cet utilisateur et ce document.");
+                return;
             }
 
+            empruntDAOImpl.retournerEmprunt(document.getId(), utilisateur.getId());
+            document.setStatut(StatutDocument.DISPONIBLE);
+            if (document instanceof Livre) {
+                livreDAOImpl.mettreAJourDocument((Livre) document);
+            } else if (document instanceof Magazine) {
+                magazineDAOImpl.mettreAJourDocument((Magazine) document);
+            } else if (document instanceof JournalScientifique) {
+                journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
+            } else if (document instanceof TheseUniversitaire) {
+                theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
+            }
+            System.out.println("Le document a été retourné avec succès.");
         } catch (SQLException e) {
             System.out.println("Erreur lors de la gestion du retour du document : " + e.getMessage());
         }
     }
+
+    public void reserverDocument() {
+        Optional<Document> documentOptional = recupererDocumentParId();
+        if (!documentOptional.isPresent()) return;
+
+        Document document = documentOptional.get();
+        System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+        String numeroAdhesion = scanner.nextLine();
+
+        UtilisateurService utilisateurService = new UtilisateurService();
+        Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
+        if (!utilisateurOptional.isPresent()) {
+            System.out.println("Utilisateur non trouvé.");
+            return;
+        }
+
+        Utilisateur utilisateur = utilisateurOptional.get();
+        if (utilisateur instanceof Etudiant && document instanceof TheseUniversitaire) {
+            System.out.println("Vous n'avez pas le droit de réserver ce document.");
+            return;
+        }
+
+        if (document.getStatut() == StatutDocument.EMPRUNTE) {
+            try {
+                if (reservationDAOImpl.verifierReservation(document.getId(), utilisateur.getId())) {
+                    System.out.println("Vous avez déjà réservé ce document.");
+                    return;
+                }
+                reservationDAOImpl.ajouterReservation(utilisateur.getId(), document.getId());
+                System.out.println("Le document a été réservé avec succès.");
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la gestion de la réservation : " + e.getMessage());
+            }
+        } else {
+            System.out.println("Le document est disponible pour emprunt.");
+            System.out.print("Voulez-vous emprunter ce document ? (oui/non) ");
+            String reponse = scanner.nextLine();
+
+            if (reponse.equalsIgnoreCase("oui")) {
+
+                try {
+                    empruntDAOImpl.ajouterEmprunt(utilisateur.getId(), document.getId());
+                    document.setStatut(StatutDocument.EMPRUNTE);
+                    if (document instanceof Livre) {
+                        livreDAOImpl.mettreAJourDocument((Livre) document);
+                    } else if (document instanceof Magazine) {
+                        magazineDAOImpl.mettreAJourDocument((Magazine) document);
+                    } else if (document instanceof JournalScientifique) {
+                        journalDAOImpl.mettreAJourDocument((JournalScientifique) document);
+                    } else if (document instanceof TheseUniversitaire) {
+                        theseDAOImpl.mettreAJourDocument((TheseUniversitaire) document);
+                    }
+                    System.out.println("Emprunt réussi.");
+                } catch (SQLException e) {
+                    System.out.println("Erreur lors de l'ajout de l'emprunt : " + e.getMessage());
+                }
+            } else {
+                System.out.println("Réservation annulée.");
+            }
+        }
+    }
+
+
+    public void annulerReservation() {
+        Optional<Document> documentOptional = recupererDocumentParId();
+        if (!documentOptional.isPresent()) return;
+
+        System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+        String numeroAdhesion = scanner.nextLine();
+
+        UtilisateurService utilisateurService = new UtilisateurService();
+        Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
+        if (!utilisateurOptional.isPresent()) {
+            System.out.println("Utilisateur non trouvé.");
+            return;
+        }
+
+
+        Utilisateur utilisateur = utilisateurOptional.get();
+        Document document = documentOptional.get();
+
+        try {
+            if (!reservationDAOImpl.verifierReservation(document.getId(), utilisateur.getId())) {
+                System.out.println("Aucune réservation trouvée pour cet utilisateur et ce document.");
+                return;
+            }
+
+            reservationDAOImpl.annulerReservation(document.getId(), utilisateur.getId());
+            System.out.println("La réservation a été annulée avec succès.");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'annulation de la réservation : " + e.getMessage());
+        }
+    }
+
 
 }

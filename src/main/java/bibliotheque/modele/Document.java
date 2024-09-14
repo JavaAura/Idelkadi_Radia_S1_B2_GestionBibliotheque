@@ -19,13 +19,19 @@ public abstract class Document  {
         this.datePublication = datePublication;
         this.nombreDePages = nombreDePages;
     }
-    public Document(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages) {
+    public Document(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages ,String statut ) {
         this.id = id;
 
         this.titre = titre;
         this.auteur = auteur;
         this.datePublication = datePublication;
         this.nombreDePages = nombreDePages;
+        try {
+            this.statut = StatutDocument.valueOf(statut.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Statut invalide fourni. Le statut sera défini par défaut à DISPONIBLE.");
+            this.statut = StatutDocument.DISPONIBLE;
+        }
     }
 
     public int getId() {

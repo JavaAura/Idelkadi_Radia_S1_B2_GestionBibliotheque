@@ -6,7 +6,9 @@ public class Professeur extends Utilisateur {
 
     private String departement;
 
-public Professeur(){}
+    public Professeur() {
+    }
+
     public Professeur(String nom, int age, String numeroDadhesion, String departement) {
         super(nom, age, numeroDadhesion);
         this.departement = departement;

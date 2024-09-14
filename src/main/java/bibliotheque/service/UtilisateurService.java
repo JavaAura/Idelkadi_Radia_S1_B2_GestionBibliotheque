@@ -151,30 +151,12 @@ public class UtilisateurService {
         System.out.print("Entrez le numéro d'adhésion de l'utilisateur : ");
         String numeroAdhesion = scanner.nextLine();
 
-        Optional<Utilisateur> utilisateur = trouverUtilisateur(numeroAdhesion);
+        Optional<Utilisateur> utilisateurOptional = trouverUtilisateur(numeroAdhesion);
 
-        if (utilisateur.isPresent()) {
-            Utilisateur user = utilisateur.get();
-
-            String numAdhesion = Optional.ofNullable(user.getNumeroDadhesion()).orElse("N/A");
-            String nom = Optional.ofNullable(user.getNom()).orElse("N/A");
-            String age = Optional.of(Integer.toString(user.getAge())).orElse("N/A");
-            String role = user instanceof Etudiant ? "Étudiant" : "Professeur";
-
-            System.out.println("Détails de l'utilisateur :");
-            System.out.println("Numéro d'adhésion : " + numAdhesion);
-            System.out.println("Nom : " + nom);
-            System.out.println("Âge : " + age);
-            System.out.println("Rôle : " + role);
-
-            if (user instanceof Etudiant) {
-                String niveau = Optional.ofNullable(((Etudiant) user).getNiveau()).orElse("N/A");
-                System.out.println("Niveau : " + niveau);
-            }
-            else if (user instanceof Professeur) {
-                String departement = Optional.ofNullable(((Professeur) user).getDepartement()).orElse("N/A");
-                System.out.println("Département : " + departement);
-            }
+        if (utilisateurOptional.isPresent()) {
+            Utilisateur utilisateur = utilisateurOptional.get();
+            System.out.println("\n*** Détails de l'Utilisateur ***");
+            System.out.println(utilisateur.toString());
         } else {
             System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
         }
@@ -235,8 +217,6 @@ public class UtilisateurService {
                     System.out.println("Le professeur a été mis à jour avec succès.");
                 }
 
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec ce numéro d'adhésion.");
             }
 
         } catch (SQLException e) {

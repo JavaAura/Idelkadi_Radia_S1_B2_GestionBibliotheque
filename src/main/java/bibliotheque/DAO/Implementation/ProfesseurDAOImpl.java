@@ -80,7 +80,7 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
 
             if (rs.next()) {
                 Professeur professeur = new Professeur();
-
+                professeur.setId(rs.getInt("id"));
                 professeur.setNumeroDadhesion(rs.getString("numero_dadhesion"));
                 professeur.setNom(rs.getString("nom"));
                 professeur.setAge(rs.getInt("age"));

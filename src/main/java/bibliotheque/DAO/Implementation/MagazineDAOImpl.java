@@ -60,7 +60,8 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
-                        resultSet.getString("numero")
+                        resultSet.getString("numero"),
+                        resultSet.getString("statut")
                 );
                 magazines.add(magazine);
             }
@@ -80,7 +81,9 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
                             rs.getString("auteur"),
                             rs.getDate("date_publication").toLocalDate(),
                             rs.getInt("nombre_de_pages"),
-                            rs.getString("numero")
+                            rs.getString("numero"),
+                            rs.getString("statut")
+
                     );
                     return Optional.of(magazine);
                 }
@@ -104,7 +107,9 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
-                        resultSet.getString("numero")
+                        resultSet.getString("numero"),
+                        resultSet.getString("statut")
+
                 );
                 magazines.add(magazine);
             }
@@ -113,14 +118,15 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
     }
 
     public void mettreAJourDocument(Magazine magazine) throws SQLException {
-        String sql = "UPDATE magazine SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, numero = ? WHERE id = ?";
+        String sql = "UPDATE magazine SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, numero = ?  , statut = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, magazine.getTitre());
             stmt.setString(2, magazine.getAuteur());
             stmt.setDate(3, Date.valueOf(magazine.getDatePublication()));
             stmt.setInt(4, magazine.getNombreDePages());
             stmt.setString(5, magazine.getNumero());
-            stmt.setInt(6, magazine.getId());
+            stmt.setString(6, magazine.getStatut().toString().toLowerCase());
+            stmt.setInt(7, magazine.getId());
             stmt.executeUpdate();
         }
     }

@@ -39,14 +39,15 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
     }
 
     public void mettreAJourDocument(Livre livre) throws SQLException {
-        String sql = "UPDATE livre SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, isbn = ? WHERE id = ?";
+        String sql = "UPDATE livre SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, isbn = ?, statut = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, livre.getTitre());
             stmt.setString(2, livre.getAuteur());
             stmt.setDate(3, java.sql.Date.valueOf(livre.getDatePublication()));
             stmt.setInt(4, livre.getNombreDePages());
             stmt.setString(5, livre.getIsbn());
-            stmt.setInt(6, livre.getId());
+            stmt.setString(6, livre.getStatut().toString().toLowerCase());
+            stmt.setInt(7, livre.getId());
             stmt.executeUpdate();
         }
     }
@@ -73,6 +74,7 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
+                        resultSet.getString("statut"),
                         resultSet.getString("isbn")
                 );
                 livres.add(livre);
@@ -96,6 +98,7 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
                         resultSet.getString("auteur"),
                         resultSet.getDate("date_publication").toLocalDate(),
                         resultSet.getInt("nombre_de_pages"),
+                        resultSet.getString("statut"),
                         resultSet.getString("isbn")
                 );
                 livres.add(livre);
@@ -116,6 +119,7 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
                             rs.getString("auteur"),
                             rs.getDate("date_publication").toLocalDate(),
                             rs.getInt("nombre_de_pages"),
+                            rs.getString("statut"),
                             rs.getString("isbn")
                     );
                     return Optional.of(livre);
