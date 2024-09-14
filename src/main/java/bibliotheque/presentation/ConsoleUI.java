@@ -4,6 +4,7 @@ package main.java.bibliotheque.presentation;
 import main.java.bibliotheque.service.BibliothequeService;
 import main.java.bibliotheque.service.UtilisateurService;
 import main.java.bibliotheque.DAO.DBConnection;
+import main.java.bibliotheque.utilitaire.InputValidator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,7 +30,7 @@ public class ConsoleUI {
             do {
                 afficherMenu();
                 System.out.print("Veuillez entrer votre choix (1-5) : ");
-                choix = scanner.nextInt();
+                choix = InputValidator.lireChoix();
                 switch (choix) {
                     case 1:
                         gererDocuments();
@@ -80,7 +81,7 @@ public class ConsoleUI {
                     "\n5- Afficher tous les documents" +
                     "\n6- Quitter le sous-menu");
             System.out.print("Veuillez entrer votre choix (1-6) : ");
-            choix = scanner.nextInt();
+            choix = InputValidator.lireChoix();
             scanner.nextLine();
             switch (choix) {
                 case 1:
@@ -120,7 +121,7 @@ public class ConsoleUI {
                     "\n6- Quitter le sous-menu");
 
             System.out.print("Veuillez entrer votre choix (1-6) : ");
-            choix = scanner.nextInt();
+            choix = InputValidator.lireChoix();
             scanner.nextLine();
             switch (choix) {
                 case 1:
@@ -157,7 +158,7 @@ public class ConsoleUI {
                     "\n3- Quitter le sous-menu");
 
             System.out.print("Veuillez entrer votre choix (1-3) : ");
-            choix = scanner.nextInt();
+            choix = InputValidator.lireChoix();
             scanner.nextLine();
 
 
@@ -191,7 +192,7 @@ public class ConsoleUI {
                 "\n3- Quitter le sous-menu");
 
         System.out.print("Veuillez entrer votre choix (1-3) : ");
-        choix = scanner.nextInt();
+        choix = InputValidator.lireChoix();
         scanner.nextLine();
 
         switch (choix) {

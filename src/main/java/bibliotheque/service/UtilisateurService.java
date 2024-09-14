@@ -35,7 +35,7 @@ public class UtilisateurService {
         while (!valid) {
             try {
                 System.out.println("Cet utilisateur est-il un étudiant ou un professeur ? (1- Étudiant, 2- Professeur)");
-                typeUtilisateur = scanner.nextInt();
+                typeUtilisateur = InputValidator.lireChoix();
                 scanner.nextLine();
 
                 if (typeUtilisateur == 1 || typeUtilisateur == 2) {

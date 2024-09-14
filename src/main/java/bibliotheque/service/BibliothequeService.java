@@ -29,7 +29,7 @@ public class BibliothequeService {
         while (!valid) {
             try {
                 System.out.println("Quel type de document voulez-vous ajouter ? (1- Livre, 2- Magazine, 3- Journal Scientifique, 4- Thèse Universitaire)");
-                typeDocument = scanner.nextInt();
+                typeDocument = InputValidator.lireChoix();
                 scanner.nextLine();
 
                 if (typeDocument >= 1 && typeDocument <= 4) {

@@ -2,6 +2,7 @@ package main.java.bibliotheque.utilitaire;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class InputValidator {
 
@@ -28,5 +29,17 @@ public class InputValidator {
     public static String generateNumeroDadhesion(String nom, int age, LocalDate dateAdhesion) {
         String formattedDate = dateAdhesion.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         return nom.toUpperCase() + age + formattedDate;
+    }
+
+    public static int lireChoix() {
+         Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : veuillez entrer un nombre valide.");
+            }
+        }
     }
 }
