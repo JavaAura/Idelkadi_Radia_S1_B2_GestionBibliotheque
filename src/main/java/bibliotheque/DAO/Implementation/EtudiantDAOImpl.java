@@ -1,15 +1,11 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.EtudiantDAO;
-import main.java.bibliotheque.DAO.UtilisateurDAO;
-import main.java.bibliotheque.modele.Etudiant;
-import main.java.bibliotheque.modele.Utilisateur;
-import main.java.bibliotheque.DAO.DBConnection;
+import bibliotheque.DAO.EtudiantDAO;
+import bibliotheque.modele.Etudiant;
+import bibliotheque.DAO.DBConnection;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +14,7 @@ public class EtudiantDAOImpl implements EtudiantDAO {
     private Connection connection;
 
     public EtudiantDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -68,10 +64,6 @@ public class EtudiantDAOImpl implements EtudiantDAO {
         }
     }
 
-    @Override
-    public Etudiant obtenirUtilisateurParId(int id) throws SQLException {
-        return null; // Implémentation à ajouter
-    }
 
     @Override
     public List<Etudiant> obtenirTousLesUtilisateurs() throws SQLException {
@@ -92,7 +84,7 @@ public class EtudiantDAOImpl implements EtudiantDAO {
         return etudiants;
     }
 
-
+    @Override
     public Optional<Etudiant> trouverParNumeroDadhesion(String numeroDadhesion) throws SQLException {
         String sql = "SELECT * FROM etudiant WHERE numero_dadhesion = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

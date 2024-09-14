@@ -1,14 +1,14 @@
-package main.java.bibliotheque.service;
+package bibliotheque.service;
 
-import main.java.bibliotheque.DAO.EtudiantDAO;
-import main.java.bibliotheque.DAO.Implementation.EtudiantDAOImpl;
-import main.java.bibliotheque.DAO.Implementation.ProfesseurDAOImpl;
-import main.java.bibliotheque.DAO.ProfesseurDAO;
-import main.java.bibliotheque.modele.Etudiant;
-import main.java.bibliotheque.modele.Professeur;
-import main.java.bibliotheque.modele.Utilisateur;
-import main.java.bibliotheque.utilitaire.InputValidator;
-import main.java.bibliotheque.utilitaire.ScannerUtil;
+import bibliotheque.DAO.EtudiantDAO;
+import bibliotheque.DAO.Implementation.EtudiantDAOImpl;
+import bibliotheque.DAO.Implementation.ProfesseurDAOImpl;
+import bibliotheque.DAO.ProfesseurDAO;
+import bibliotheque.modele.Etudiant;
+import bibliotheque.modele.Professeur;
+import bibliotheque.modele.Utilisateur;
+import bibliotheque.utilitaire.InputValidator;
+import bibliotheque.utilitaire.ScannerUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ public class UtilisateurService {
     private static EtudiantDAO etudiantDAO = new EtudiantDAOImpl();
     private static ProfesseurDAO professeurDAO = new ProfesseurDAOImpl();
 
-    public  void ajouterUtilisateur() {
+    public void ajouterUtilisateur() {
         int typeUtilisateur = 0;
         boolean valid = false;
 
@@ -162,7 +162,6 @@ public class UtilisateurService {
         }
     }
 
-
     public void mettreAJourUtilisateur() {
         try {
             System.out.print("Entrez le numéro d'adhésion de l'utilisateur à mettre à jour : ");
@@ -271,8 +270,6 @@ public class UtilisateurService {
             return Optional.empty();
         }
     }
-
-
 
 
 }

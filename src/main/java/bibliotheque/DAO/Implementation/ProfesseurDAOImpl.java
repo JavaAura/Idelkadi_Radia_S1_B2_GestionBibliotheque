@@ -1,8 +1,8 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.ProfesseurDAO;
-import main.java.bibliotheque.modele.Professeur;
-import main.java.bibliotheque.DAO.DBConnection;
+import bibliotheque.DAO.ProfesseurDAO;
+import bibliotheque.modele.Professeur;
+import bibliotheque.DAO.DBConnection;
 
 import java.io.IOException;
 import java.sql.*;
@@ -15,7 +15,7 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
     private Connection connection;
 
     public ProfesseurDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -34,7 +34,8 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
                 System.out.println("Le professeur a été ajouté avec succès !");
             } else {
                 System.out.println("L'ajout du professeur a échoué.");
-            }        } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
             System.out.println("Erreur lors de l'ajout du professeur : " + e.getMessage());
             throw e;
         }
@@ -63,10 +64,7 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
             statement.executeUpdate();
         }
     }
-    @Override
-    public Professeur obtenirUtilisateurParId(int id) throws SQLException {
-        return null;
-    }
+
 
     public Optional<Professeur> trouverParNumeroDadhesion(String numeroDadhesion) throws SQLException {
         String sql = "SELECT * FROM professeur WHERE numero_dadhesion = ?";
@@ -105,7 +103,6 @@ public class ProfesseurDAOImpl implements ProfesseurDAO {
         }
         return professeurs;
     }
-
 
 
 }

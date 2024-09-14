@@ -1,11 +1,11 @@
-package main.java.bibliotheque.service;
+package bibliotheque.service;
 
-import main.java.bibliotheque.DAO.Implementation.*;
-import main.java.bibliotheque.interfaces.Empruntable;
-import main.java.bibliotheque.interfaces.Reservable;
-import main.java.bibliotheque.modele.*;
-import main.java.bibliotheque.utilitaire.InputValidator;
-import main.java.bibliotheque.utilitaire.ScannerUtil;
+import bibliotheque.DAO.Implementation.*;
+import bibliotheque.modele.Empruntable;
+import bibliotheque.modele.Reservable;
+import bibliotheque.modele.*;
+import bibliotheque.utilitaire.InputValidator;
+import bibliotheque.utilitaire.ScannerUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -464,18 +464,18 @@ public class BibliothequeService {
         Document document = documentOptional.get();
 
         if (document.getStatut() != StatutDocument.DISPONIBLE) {
-            System.out.println("Le document est déjà emprunté.");
+            System.out.println("Le document est deja emprunte.");
             return;
         }
 
-        System.out.print("Veuillez entrer votre numéro d'adhésion : ");
+        System.out.print("Veuillez entrer votre numero d'adhesion : ");
         String numeroAdhesion = scanner.nextLine();
 
 
         UtilisateurService utilisateurService = new UtilisateurService();
         Optional<Utilisateur> utilisateurOptional = utilisateurService.trouverUtilisateur(numeroAdhesion);
         if (!utilisateurOptional.isPresent()) {
-            System.out.println("Utilisateur non trouvé.");
+            System.out.println("Utilisateur non trouve.");
             return;
         }
 

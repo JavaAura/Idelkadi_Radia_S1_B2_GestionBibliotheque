@@ -1,11 +1,9 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.DocumentDAO;
-import main.java.bibliotheque.DAO.DBConnection;
-import main.java.bibliotheque.modele.Livre;
-import main.java.bibliotheque.modele.StatutDocument;
+import bibliotheque.DAO.DocumentDAO;
+import bibliotheque.DAO.DBConnection;
+import bibliotheque.modele.Livre;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +14,7 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
     private static Connection connection;
 
     public LivreDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -48,6 +46,7 @@ public class LivreDAOImpl implements DocumentDAO<Livre> {
             stmt.executeUpdate();
         }
     }
+
     @Override
     public void supprimerDocument(int livreID) throws SQLException {
         String query = "DELETE FROM livre WHERE id = ?";

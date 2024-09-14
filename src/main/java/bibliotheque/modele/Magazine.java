@@ -1,22 +1,20 @@
-package main.java.bibliotheque.modele;
+package bibliotheque.modele;
 
-import main.java.bibliotheque.interfaces.Empruntable;
-import main.java.bibliotheque.interfaces.Reservable;
-import main.java.bibliotheque.utilitaire.DateUtils;
+import bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class Magazine extends Document  implements  Empruntable , Reservable {
+public class Magazine extends Document implements Empruntable, Reservable {
     private String numero;
 
-    public Magazine(String titre, String auteur, LocalDate datePublication, int nombreDePages , String numero) {
+    public Magazine(String titre, String auteur, LocalDate datePublication, int nombreDePages, String numero) {
         super(titre, auteur, datePublication, nombreDePages);
         this.numero = numero;
     }
 
-    public Magazine(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages , String numero,String statut) {
-        super(id, titre, auteur, datePublication, nombreDePages, statut );
+    public Magazine(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages, String numero, String statut) {
+        super(id, titre, auteur, datePublication, nombreDePages, statut);
         this.numero = numero;
     }
 
@@ -37,17 +35,18 @@ public class Magazine extends Document  implements  Empruntable , Reservable {
         String numero = Optional.ofNullable(getNumero()).orElse("N/A");
         int nombreDePages = getNombreDePages();
 
-        return String.format("| %-10d | %-25s | %-15s | %-15s | %-10s | %-10d |",id, titre, auteur, datePublication, numero, nombreDePages);
+        return String.format("| %-10d | %-25s | %-15s | %-15s | %-10s | %-10d |", id, titre, auteur, datePublication, numero, nombreDePages);
     }
+
     public void emprunter() {
 
-            System.out.println("La magazine a été emprunté.");
+        System.out.println("La magazine a été emprunté.");
 
     }
 
     @Override
     public void retourner() {
-            System.out.println("La magazine a été retourné.");
+        System.out.println("La magazine a été retourné.");
     }
 
     @Override

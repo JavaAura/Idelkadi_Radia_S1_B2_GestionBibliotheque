@@ -1,9 +1,9 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.DocumentDAO;
-import main.java.bibliotheque.DAO.DBConnection;
-import main.java.bibliotheque.modele.Magazine;
-import main.java.bibliotheque.modele.StatutDocument;
+import bibliotheque.DAO.DocumentDAO;
+import bibliotheque.DAO.DBConnection;
+import bibliotheque.modele.Magazine;
+import bibliotheque.modele.StatutDocument;
 
 import java.io.IOException;
 import java.sql.*;
@@ -16,7 +16,7 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
     private static Connection connection;
 
     public MagazineDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -114,6 +114,7 @@ public class MagazineDAOImpl implements DocumentDAO<Magazine> {
         return magazines;
     }
 
+    @Override
     public void mettreAJourDocument(Magazine magazine) throws SQLException {
         String sql = "UPDATE magazine SET titre = ?, auteur = ?, date_publication = ?, nombre_de_pages = ?, numero = ?  , statut = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

@@ -1,17 +1,14 @@
-package main.java.bibliotheque.modele;
-
-import main.java.bibliotheque.interfaces.Empruntable;
-import main.java.bibliotheque.interfaces.Reservable;
+package bibliotheque.modele;
 
 import java.time.LocalDate;
 
-public abstract class Document  {
+public abstract class Document {
     private int id;
     private String titre;
     private String auteur;
     private LocalDate datePublication;
     private int nombreDePages;
-    private StatutDocument statut= StatutDocument.DISPONIBLE;
+    private StatutDocument statut = StatutDocument.DISPONIBLE;
 
     public Document(String titre, String auteur, LocalDate datePublication, int nombreDePages) {
         this.titre = titre;
@@ -19,7 +16,8 @@ public abstract class Document  {
         this.datePublication = datePublication;
         this.nombreDePages = nombreDePages;
     }
-    public Document(int id,String titre, String auteur, LocalDate datePublication, int nombreDePages ,String statut ) {
+
+    public Document(int id, String titre, String auteur, LocalDate datePublication, int nombreDePages, String statut) {
         this.id = id;
 
         this.titre = titre;

@@ -1,4 +1,4 @@
-package main.java.bibliotheque.DAO;
+package bibliotheque.DAO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +28,9 @@ public class DBConnection {
 
         try {
             this.connection = DriverManager.getConnection(url, username, password);
-            System.out.println("Connexion à la base de données établie.");
+            System.out.println("Connexion a la base de données etablie.");
         } catch (SQLException ex) {
-            throw new SQLException("Échec de la création de la connexion à la base de données : " + ex.getMessage(), ex);
+            throw new SQLException("Echec de la création de la connexion a la base de données : " + ex.getMessage(), ex);
         }
     }
 
@@ -47,7 +47,7 @@ public class DBConnection {
                     try {
                         instance = result = new DBConnection();
                     } catch (SQLException | IOException ex) {
-                        throw new RuntimeException("Échec de l'initialisation de la connexion à la base de données : " + ex.getMessage(), ex);
+                        throw new RuntimeException("Echec de l'initialisation de la connexion a la base de donnees : " + ex.getMessage(), ex);
                     }
                 }
             }
@@ -60,7 +60,7 @@ public class DBConnection {
             try {
                 connection.close();
             } catch (SQLException ex) {
-                System.out.println("Échec de la fermeture de la connexion : " + ex.getMessage());
+                System.out.println("Echec de la fermeture de la connexion : " + ex.getMessage());
             }
         }
     }

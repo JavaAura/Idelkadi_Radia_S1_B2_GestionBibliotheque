@@ -1,8 +1,6 @@
-package main.java.bibliotheque.DAO;
+package bibliotheque.DAO;
 
-import main.java.bibliotheque.modele.Document;
-import main.java.bibliotheque.modele.Magazine;
-import main.java.bibliotheque.modele.StatutDocument;
+import bibliotheque.modele.Document;
 
 import java.sql.SQLException;
 import java.util.List;

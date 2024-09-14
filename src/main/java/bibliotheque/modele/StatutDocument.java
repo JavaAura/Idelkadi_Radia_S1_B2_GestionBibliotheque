@@ -1,4 +1,4 @@
-package main.java.bibliotheque.modele;
+package bibliotheque.modele;
 
 public enum StatutDocument {
     DISPONIBLE("disponible"),

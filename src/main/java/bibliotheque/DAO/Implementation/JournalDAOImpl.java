@@ -1,11 +1,9 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.DocumentDAO;
-import main.java.bibliotheque.DAO.DBConnection;
-import main.java.bibliotheque.modele.JournalScientifique;
-import main.java.bibliotheque.modele.StatutDocument;
+import bibliotheque.DAO.DocumentDAO;
+import bibliotheque.DAO.DBConnection;
+import bibliotheque.modele.JournalScientifique;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +14,7 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
     private static Connection connection;
 
     public JournalDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -30,7 +28,7 @@ public class JournalDAOImpl implements DocumentDAO<JournalScientifique> {
             preparedStatement.setInt(4, journal_scientifique.getNombreDePages());
             preparedStatement.setString(5, journal_scientifique.getDomaineRecherche());
             preparedStatement.executeUpdate();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new SQLException(ex.getMessage());
         }
     }

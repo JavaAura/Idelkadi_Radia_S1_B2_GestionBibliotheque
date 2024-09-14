@@ -1,19 +1,18 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.DBConnection;
+import bibliotheque.DAO.DBConnection;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReservationDAOImpl{
+public class ReservationDAOImpl {
 
     private Connection connection;
 
     public ReservationDAOImpl() {
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 
@@ -36,6 +35,7 @@ public class ReservationDAOImpl{
             pstmt.executeUpdate();
         }
     }
+
     public void annulerReservation(int documentId, int utilisateurId) throws SQLException {
         String sql = "UPDATE reservation SET date_annulation = NOW() WHERE document_id = ? AND utilisateur_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

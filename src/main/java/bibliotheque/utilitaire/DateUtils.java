@@ -1,4 +1,4 @@
-package main.java.bibliotheque.utilitaire;
+package bibliotheque.utilitaire;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

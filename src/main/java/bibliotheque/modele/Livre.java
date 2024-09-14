@@ -1,13 +1,11 @@
-package main.java.bibliotheque.modele;
+package bibliotheque.modele;
 
-import main.java.bibliotheque.interfaces.Empruntable;
-import main.java.bibliotheque.interfaces.Reservable;
-import main.java.bibliotheque.utilitaire.DateUtils;
+import bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class Livre extends Document implements Empruntable , Reservable {
+public class Livre extends Document implements Empruntable, Reservable {
     private String isbn;
 
     public Livre(String titre, String auteur, LocalDate datePublication, int nombreDePages, String isbn) {

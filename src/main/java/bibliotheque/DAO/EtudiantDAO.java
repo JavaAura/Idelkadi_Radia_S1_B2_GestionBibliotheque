@@ -1,6 +1,6 @@
-package main.java.bibliotheque.DAO;
+package bibliotheque.DAO;
 
-import main.java.bibliotheque.modele.Etudiant;
+import bibliotheque.modele.Etudiant;
 
 public interface EtudiantDAO extends UtilisateurDAO<Etudiant> {
 

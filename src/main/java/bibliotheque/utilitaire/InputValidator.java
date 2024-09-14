@@ -1,4 +1,4 @@
-package main.java.bibliotheque.utilitaire;
+package bibliotheque.utilitaire;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +32,7 @@ public class InputValidator {
     }
 
     public static int lireChoix() {
-         Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             try {

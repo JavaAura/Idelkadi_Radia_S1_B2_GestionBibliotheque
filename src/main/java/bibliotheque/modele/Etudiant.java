@@ -1,12 +1,14 @@
-package main.java.bibliotheque.modele;
+package bibliotheque.modele;
 
 import java.util.Optional;
 
-public class Etudiant extends Utilisateur{
+public class Etudiant extends Utilisateur {
     private String niveau;
 
 
-    public Etudiant(){}
+    public Etudiant() {
+    }
+
     public Etudiant(String nom, int age, String numeroDadhesion, String niveau) {
         super(nom, age, numeroDadhesion);
         this.niveau = niveau;
@@ -19,6 +21,7 @@ public class Etudiant extends Utilisateur{
     public void setNiveau(String niveau) {
         this.niveau = niveau;
     }
+
     @Override
     public String toString() {
         String numeroAdhesion = Optional.ofNullable(getNumeroDadhesion()).orElse("N/A");

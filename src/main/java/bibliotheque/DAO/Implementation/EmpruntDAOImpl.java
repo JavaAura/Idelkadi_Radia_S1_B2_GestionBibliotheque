@@ -1,21 +1,19 @@
-package main.java.bibliotheque.DAO.Implementation;
+package bibliotheque.DAO.Implementation;
 
-import main.java.bibliotheque.DAO.DBConnection;
-import main.java.bibliotheque.DAO.EmpruntDAO;
+import bibliotheque.DAO.DBConnection;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EmpruntDAOImpl implements EmpruntDAO {
+public class EmpruntDAOImpl {
 
     private Connection connection;
 
-    public EmpruntDAOImpl()  {
+    public EmpruntDAOImpl() {
 
-            this.connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
 
     }
 

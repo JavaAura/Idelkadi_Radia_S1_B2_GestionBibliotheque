@@ -1,13 +1,11 @@
-package main.java.bibliotheque.modele;
+package bibliotheque.modele;
 
-import main.java.bibliotheque.interfaces.Empruntable;
-import main.java.bibliotheque.interfaces.Reservable;
-import main.java.bibliotheque.utilitaire.DateUtils;
+import bibliotheque.utilitaire.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class TheseUniversitaire extends Document implements Empruntable , Reservable {
+public class TheseUniversitaire extends Document implements Empruntable, Reservable {
     private String universite;
     private String domaine;
 
@@ -55,7 +53,7 @@ public class TheseUniversitaire extends Document implements Empruntable , Reserv
 
 
     public void emprunter() {
-            System.out.println("La thése a été emprunté.");
+        System.out.println("La thése a été emprunté.");
     }
 
     @Override
